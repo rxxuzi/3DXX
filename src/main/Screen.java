@@ -18,7 +18,6 @@ import javax.swing.JPanel;
 
 import static main.Main.saves;
 
-
 /*
 * Main.java‚ÌFrame‚Éƒpƒlƒ‹‚Æ‚µ‚Äadd‚·‚éclass
 * */
