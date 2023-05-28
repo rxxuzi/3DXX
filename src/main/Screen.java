@@ -1,4 +1,6 @@
 package main;
+import com.sun.xml.internal.ws.developer.Serialization;
+
 import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Robot;
@@ -22,12 +24,7 @@ import static main.Main.saves;
 * Main.javaのFrameにパネルとしてaddするclass
 * */
 public class Screen extends JPanel {
-
-	/**
-	 * serialVersionUID は、直列化されたオブジェクトのバージョン管理に使用されます。
-	 * serialVersionUID を明示的に宣言しない場合、JVM は Serializable クラスのさまざまな側面に基づいて自動的に計算します。
-	 * ただし、異なるバージョンのクラスを読み込んでしまうことで発生しうる不正な動作を防ぐために、serialVersionUID をクラスに宣言することが推奨されています。
-	 */
+	@Serialization
 	private static final long serialVersionUID = 1L;
 
 
@@ -41,92 +38,49 @@ public class Screen extends JPanel {
 	private static final boolean debugMode = false;
 	private static final double cameraSpeed = 0.002; //default => 0.25
 	private static final long moveInterval = 10; // default => 0
-
-	//classを格納するArrayList
+	private double gravity = 0.001; // default => 0.001
 	public static ArrayList<DPolygon> DPolygons = new ArrayList<>();
 	public static ArrayList<Cube> Cube = new ArrayList<>();
 	public static ArrayList<Pyramid> Pyramid = new ArrayList<>();
-
-	//床の情報
 	public static ArrayList<Double> Floor = new ArrayList<>();
-
-	//カウント用配列
 	private static final int[] colorBox = new int[256 * 256 * 256];
 	private static int counter1 = 0;
-
-	//現在マウスが乗っているポリゴンの情報
 	static Object PolygonOver = null ;
-	//フォーカスしているポリゴン情報
 	private static Object FocusPolygon = null;
-	//オブジェクトを削除するインターバル(Mill Second)
 	private static final long deleteInterval = 200;
-
 	private static long LastMoveTime = 0;
-	//最後にキューブを削除した時間
 	private static long LastCubeDeleteTime = 0;
 	private static long LastCubeGenerateTime = 0 ;
 	private int NumberOfDeleteCube = 0 ;
 	private static String dCube = "NONE";
-
-	//マウスを中心に置いておくために使用するサブクラス
 	Robot r ;
-	//乱数生成
 	static Random random = new Random();
-
-	//初期のカメラとオブジェクトの位置
 	static final double[] FViewFrom = { -5 , -5 , 10 };
 	static final double[] FViewTo = {  0 , 0 ,  0 };
-
-	//カメラの位置
 	static double[] ViewFrom = FViewFrom.clone();
-
-	//オブジェクトの位置
 	static double[] ViewTo   = FViewTo.clone();
-
-	//ズーム率
 	static double zoom = 1000, MinZoom = 100, MaxZoom = 5000;
-	//マウスの座標
 	static double MouseX = 0 , MouseY = 0;
-
-	//視点の動くスピードを制御。大きいほど遅く動く Max 1.0
 	static double MovementSpeed = 0.5;
-
-	//FPSの測定
 	double drawFPS = 0;
 	double MaxFPS = 2000;
-//	double SleepTime = 1000.0 / MaxFPS;
 	double LastFPSCheck = 0 , Checks = 0 , LastRefresh = 0;
-
 	private double VerticalLook = -0.9; //0.99 ~ -0.99まで、正の値の時は上向き。負の値の時は下向き
 	private double HorizontalLook = 0; // 任意の数値をとり、ラジアン単位で一周する
 	double VerticalRotationSpeed = 1000; //垂直回転の速さ
 	double HorizontalRotationSpeed = 500; //水平回転の速さ
-
 	static final double aimSight = 4;	// センタークロスの大きさ
-
-	//配列DPolygonの描画する順番を保持する配列
-	int[] NewOrder;
-
+	int[] NewOrder; //配列DPolygonの描画する順番を保持する配列
 	static boolean OutLines = true;
-
-	//キー入力の情報を格納する配列
-	boolean[] Control = new boolean[15];
-
-	//フォントサイズ
+	boolean[] Control = new boolean[15];//キー入力の情報を格納する配列
 	final static int FontSize = 15;
-
 	static String condition = "NONE";
-
 	int Press = 10;
-
 	public static long t ;
 
-	/*描画したい3Dポリゴンを定義するclass*/
 	public Screen(){
-		//キー入力
 		this.addKeyListener(new KeyTyped());
 		setFocusable(true);
-		//マウス関連
 		this.addMouseListener(new AboutMouse());
 		this.addMouseMotionListener(new AboutMouse());
 		this.addMouseWheelListener(new AboutMouse());
@@ -135,7 +89,6 @@ public class Screen extends JPanel {
 
 
 		Cube.add(new Cube(5,5,5,3,3,3,Color.green));
-		/*地面の表示*/
 		int d = 2;//幅
 
 		for(int i = -10 ; i < 50 ; i += d) {
@@ -232,11 +185,9 @@ public class Screen extends JPanel {
             c.x += dx;
             c.y += dy;
 			c.updatePoly();
-//            c.z += dz;
         }
 	}
 
-	/*描画更新のためのメソッド*/
 	private void SleepAndRefresh(){
 		long timeSLU = (long) (System.currentTimeMillis() - LastRefresh);
 
@@ -255,12 +206,8 @@ public class Screen extends JPanel {
 				e.printStackTrace();
 			}
 		}
-
 		LastRefresh = System.currentTimeMillis();
-
-		//描画更新
 		repaint();
-
 		t = (System.currentTimeMillis() - Main.StartUpTime) / 1000;
 	}
 
@@ -271,7 +218,6 @@ public class Screen extends JPanel {
 				Cube.get(0).x < ViewFrom[0] && Cube.get(0).dx >ViewFrom[0] && Cube.get(0).y < ViewFrom[1] && Cube.get(0).dy > ViewFrom[1]
 		){
 			condition = "in the BOX";
-			//ViewFromに近い方の座標を採用
 			if (Math.abs(Cube.get(0).x - ViewFrom[0]) > Math.abs(Cube.get(0).dx - ViewFrom[0])) {
 				ViewFrom[0] += 0.1;
 			}else{
@@ -322,6 +268,7 @@ public class Screen extends JPanel {
 
 		//全削除
 		if(Control[9]) {
+			NumberOfDeleteCube += Cube.size();
 			for(int i = 0 ; i < Cube.size() ; i ++ ) {
 				Cube.get(i).removeCube();
 				condition = "ALL DELETE";
@@ -450,8 +397,8 @@ public class Screen extends JPanel {
 		if(Control[6]) {
 			//z < 0の場合z = 0で止める
 			if(ViewFrom[2] > 0.0) {
-				ViewFrom[2] -= 0.4;
-				ViewTo[2] -= 0.4;
+				ViewFrom[2] -= 0.4 + gravity;
+				ViewTo[2] -= 0.4 + gravity;
 			}else {
 				ViewFrom[2] -= 0.1;
 				ViewTo[2] -= 0.1;
@@ -653,16 +600,11 @@ public class Screen extends JPanel {
 
 		public void mouseReleased(MouseEvent e) {
 		}
-		
-		//マウスホイールをつかさどるメソッド
 		public void mouseWheelMoved(MouseWheelEvent e) {
-			
-			//ホイールが正になるとズームアウト
 			if(e.getUnitsToScroll()>0){
 				if(zoom > MinZoom) zoom -= 25 * e.getUnitsToScroll();
 				condition = "Zoom out";
 			}else{
-				//ホイールが負になるとズームイン
 				if(zoom < MaxZoom) zoom -= 25 * e.getUnitsToScroll();
 				condition = "Zoom in";
 			}	
