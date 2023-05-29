@@ -101,6 +101,8 @@ public class Screen extends JPanel {
 			}
 		}
 
+		new Ball(3,3,3,4,4,4,Color.MAGENTA);
+
 	}
 
 	/*•`‰æ‚ÉŠÖ‚·‚éƒƒ\ƒbƒh*/
@@ -171,6 +173,14 @@ public class Screen extends JPanel {
 		if(firstPersonMode){
 			hitJudgment();
 		}
+		int[] hx1 = new int[6];
+		int[] hy1 = new int[6];
+		for(int i = 0; i < 6; i++){
+			hx1[i] = (int) (100 * Math.cos(i * Math.PI * 2 / 6) + 300);
+			hy1[i] = (int) (100 * Math.sin(i * Math.PI * 2 / 6) + 500);
+		}
+
+		g.fillPolygon(hx1 , hy1 , Ball.hx1.length);
 
 		for(main.Cube c : Cube){
 			c.setDisplayCube();
