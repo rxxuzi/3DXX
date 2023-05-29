@@ -89,19 +89,13 @@ public class Screen extends JPanel {
 
 
 		Cube.add(new Cube(5,5,5,3,3,3,Color.green));
-		int d = 2;//•
 
-		for(int i = -10 ; i < 50 ; i += d) {
-			for(int j = -20  ; j < 40 ; j += d) {
-				if((i+j)/2%2 == 0) {
-					DPolygons.add(new DPolygon(new double[]{i, i, i+d, i+d} , new double[] {j, j+d, j+d, j},new double[] {0,0,0,0}, new Color(255 ,179 ,219), false));
-				}else {
-					DPolygons.add(new DPolygon(new double[]{i, i, i+d, i+d} , new double[] {j, j+d, j+d, j},new double[] {0,0,0,0}, new Color(179 ,236 ,255), false));
-				}
-			}
-		}
+
 
 		new Ball(3,3,3,4,4,4,Color.MAGENTA);
+
+		new Ground();
+//		new Floor();
 
 	}
 
@@ -157,7 +151,11 @@ public class Screen extends JPanel {
 		g.drawString("Vertical angle   	 : " + (int)VAngle + "‹" , 10 ,120);
 		g.drawString("Number Of Polygons : " + DPolygons.size() , 10 ,135);
 		g.drawString("Number Of Cubes    : " + Cube.size() , 10 ,150);
-		g.drawString("Focus Polys ID : " + FocusPolygon.toString() , 10 ,170);
+		try{
+			g.drawString("Focus Polys ID : " + FocusPolygon.toString() , 10 ,170);
+		}catch (NullPointerException e){
+            g.drawString("Focus Polys ID : " + "NULL" , 10 ,170);
+        }
 		g.drawString(t +"s", 10,200);
 		g.setFont(new Font(Font.SANS_SERIF , Font.BOLD , 20));
 		g.drawString("CONDITION: " + condition , 10 ,190);
@@ -173,14 +171,16 @@ public class Screen extends JPanel {
 		if(firstPersonMode){
 			hitJudgment();
 		}
-		int[] hx1 = new int[6];
-		int[] hy1 = new int[6];
-		for(int i = 0; i < 6; i++){
-			hx1[i] = (int) (100 * Math.cos(i * Math.PI * 2 / 6) + 300);
-			hy1[i] = (int) (100 * Math.sin(i * Math.PI * 2 / 6) + 500);
-		}
 
-		g.fillPolygon(hx1 , hy1 , Ball.hx1.length);
+		if(debugMode){
+			int[] hx1 = new int[6];
+			int[] hy1 = new int[6];
+			for(int i = 0; i < 6; i++){
+				hx1[i] = (int) (100 * Math.cos(i * Math.PI * 2 / 6) + 300);
+				hy1[i] = (int) (100 * Math.sin(i * Math.PI * 2 / 6) + 500);
+			}
+			g.fillPolygon(hx1 , hy1 , Ball.hx1.length);
+		}
 
 		for(main.Cube c : Cube){
 			c.setDisplayCube();
