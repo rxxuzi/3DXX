@@ -38,7 +38,7 @@ public class Screen extends JPanel {
 	private static final boolean debugMode = false;
 	private static final double cameraSpeed = 0.002; //default => 0.25
 	private static final long moveInterval = 10; // default => 0
-	private double gravity = 0.001; // default => 0.001
+	private static final double gravity = 0.001; // default => 0.001
 	public static ArrayList<DPolygon> DPolygons = new ArrayList<>();
 	public static ArrayList<Cube> Cube = new ArrayList<>();
 	public static ArrayList<Pyramid> Pyramid = new ArrayList<>();
@@ -57,11 +57,11 @@ public class Screen extends JPanel {
 	static Random random = new Random();
 	static final double[] FViewFrom = { -5 , -5 , 10 };
 	static final double[] FViewTo = {  0 , 0 ,  0 };
-	static double[] ViewFrom = FViewFrom.clone();
-	static double[] ViewTo   = FViewTo.clone();
+	static double[] ViewFrom = FViewFrom.clone(); //カメラの座標
+	static double[] ViewTo   = FViewTo.clone();	  //オブジェクトの座標
 	static double zoom = 1000, MinZoom = 100, MaxZoom = 5000;
-	static double MouseX = 0 , MouseY = 0;
-	static double MovementSpeed = 0.5;
+	static double MouseX = 0 , MouseY = 0; //マウスの座標
+	static double MovementSpeed = 0.5; //マウスのスピード
 	double drawFPS = 0;
 	double MaxFPS = 2000;
 	double LastFPSCheck = 0 , Checks = 0 , LastRefresh = 0;
@@ -84,7 +84,6 @@ public class Screen extends JPanel {
 		this.addMouseListener(new AboutMouse());
 		this.addMouseMotionListener(new AboutMouse());
 		this.addMouseWheelListener(new AboutMouse());
-
 		invisibleMouse();
 
 
@@ -621,5 +620,12 @@ public class Screen extends JPanel {
 			
 		}
 		
+	}
+
+	@Override
+	public String toString() {
+		return " FPS MODE : " + firstPersonMode
+				+ "\n DEBUG MODE : " + debugMode
+				+ "\n GRAVITY	 : " + gravity;
 	}
 }

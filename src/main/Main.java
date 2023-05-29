@@ -20,7 +20,7 @@ public class Main{
 
 	public static void main(String[] args){
 		JFrame jf = new JFrame();
-		Screen Panel = new Screen();
+		Screen Core = new Screen();
 		if(Debug){
 			jf.setSize(1000,1000);
 			jf.add(new Menu());
@@ -29,9 +29,10 @@ public class Main{
 			jf.setUndecorated(true);
 			jf.setSize(ScreenSize);
 			jf.getJMenuBar();
-			jf.add(Panel);
+			jf.add(Core);
 		}
 		jf.setVisible(true);
 		System.out.println("It is working properly.");
+		System.out.println("property  : \n"  + Core);
 	}
 }
