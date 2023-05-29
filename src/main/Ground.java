@@ -11,6 +11,7 @@ public class Ground {
     public static final int GROUND_X = 0;
     public static final int GROUND_Y = Ground.HEIGHT - 1;
     public static final int MAP_SIZE = 50;
+    public static final int Maximum_Height = 10;
 
     public static final int GROUND_WIDTH = Ground.WIDTH * Ground.SIZE;
     public static final int GROUND_HEIGHT = Ground.HEIGHT * Ground.SIZE;
@@ -34,18 +35,20 @@ public class Ground {
         double[] values1 = new double[MAP_SIZE];
         double[] values2 = new double[values1.length];
 
-        for (int y = 0; y < values1.length/2; y+=2){
-            for(int i = 0; i < values1.length; i++){
-                values1[i] = values2[i];
-                if(r.nextInt(10) > 8){
-                    values2[i] = r.nextDouble() * ROUGHNESS * 5;
+        for (int y = 0; y < MAP_SIZE/2; y+=2){
+            for(int x = 0; x < MAP_SIZE; x++){
+                values1[x] = values2[x];
+                if(r.nextInt(15) > 13){
+//                    values2[x] = r.nextDouble() * ROUGHNESS * 5;
+                    values2[x] = Maximum_Height;
+                    System.out.println(y +"," + x);
                 }else {
-                    values2[i] = r.nextDouble() * ROUGHNESS;
+                    values2[x] = r.nextDouble() * ROUGHNESS;
                 }
             }
 
             if(y != 0){
-                for (int x = 0; x < values1.length/2; x++) {
+                for (int x = 0; x < MAP_SIZE/2; x++) {
                     Screen.DPolygons.add(new DPolygon(new double[]{(SIZE * x), (SIZE * x), SIZE + (SIZE * x)}, new double[]{(SIZE * y), SIZE + (SIZE * y), SIZE + (SIZE * y)}, new double[]{values1[x], values2[x], values2[x+1]}, G, false));
                     Screen.DPolygons.add(new DPolygon(new double[]{(SIZE * x), SIZE + (SIZE * x), SIZE + (SIZE * x)}, new double[]{(SIZE * y), SIZE + (SIZE * y), (SIZE * y)}, new double[]{values1[x], values2[x+1], values1[x+1]}, G, false));
                 }
