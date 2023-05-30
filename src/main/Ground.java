@@ -11,7 +11,7 @@ public class Ground {
     public static final int GROUND_X = 0;
     public static final int GROUND_Y = Ground.HEIGHT - 1;
     public static final int MAP_SIZE = 50;
-    public static final int Maximum_Height = 10;
+    public static final int Maximum_Height = 5;
 
     public static final int GROUND_WIDTH = Ground.WIDTH * Ground.SIZE;
     public static final int GROUND_HEIGHT = Ground.HEIGHT * Ground.SIZE;
@@ -38,9 +38,9 @@ public class Ground {
         for (int y = 0; y < MAP_SIZE/2; y+=2){
             for(int x = 0; x < MAP_SIZE; x++){
                 values1[x] = values2[x];
-                if(r.nextInt(15) > 13){
+                if(r.nextInt(100) > 5){
 //                    values2[x] = r.nextDouble() * ROUGHNESS * 5;
-                    values2[x] = Maximum_Height;
+                    values2[x] = r.nextInt(Maximum_Height);
                     System.out.println(y +"," + x);
                 }else {
                     values2[x] = r.nextDouble() * ROUGHNESS;

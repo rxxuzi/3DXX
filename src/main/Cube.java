@@ -26,6 +26,18 @@ public class Cube {
 
 	//カメラと離れられる最大距離
 	public static final double maxDis = 100d;
+
+	public boolean moveX = false;
+	public boolean moveY = false;
+	public boolean moveZ = false;
+
+	public static final double minX = -15d;
+	public static final double minY = -15d;
+	public static final double minZ = 0d;
+
+	public static final double maxX = 15d;
+	public static final double maxY = 15d;
+	public static final double maxZ = 30d;
 	
 	//座標と色情報からポリゴンを生成
 	public Cube(double x, double y, double z, double dx, double dy, double dz, Color color){
@@ -161,6 +173,73 @@ public class Cube {
 
 		}
 	}
+
+	public void reflection(double ddx , double ddy, double ddz){
+		if(x+dx > maxX){
+            moveX = false;
+        }
+		if(x < minX){
+            moveX = true;
+        }
+		if(y+dy > maxY){
+			moveY = false;
+		}
+		if(y < minY){
+			moveY = true;
+		}
+		if(z+dz > maxZ){
+            moveZ = false;
+        }
+		if(z < minZ){
+			moveZ = true;
+		}
+
+		if(moveX){
+			x += ddx;
+		}else{
+			x -= ddx;
+		}
+
+		if (moveY){
+            y += ddy;
+        }else{
+			y  -= ddy;
+		}
+
+		if (moveZ){
+			z += ddz;
+		}else{
+			z -= ddz;
+		}
+	}
+	public void reflection2D(double ddx , double ddy){
+		if(x+dx > maxX){
+            moveX = false;
+        }
+		if(x < minX){
+            moveX = true;
+        }
+		if(y+dy > maxY){
+			moveY = false;
+		}
+		if(y < minY){
+			moveY = true;
+		}
+
+		if(moveX){
+			x += ddx;
+		}else{
+			x -= ddx;
+		}
+
+		if (moveY){
+            y += ddy;
+        }else{
+			y  -= ddy;
+		}
+	}
+
+
 
 	void removeCube(){
 		

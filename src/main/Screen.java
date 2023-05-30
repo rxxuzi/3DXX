@@ -15,6 +15,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.JPanel;
 
@@ -30,10 +31,10 @@ public class Screen extends JPanel {
 
 	/**
 	 * fpsModeをTrueにすると以下のことが起こります
-	 * 	* 1.重力の追加(浮遊できなくなる)
-	 * 	* 2.カメラの最低z座標が2となる
+	 * * 1.重力の追加(浮遊できなくなる)
+	 * * 2.カメラの最低z座標が2となる
 	 */
-	public static final boolean firstPersonMode = false;
+	public static final AtomicBoolean firstPersonMode = new AtomicBoolean(false);
 	private static final double height = 4.0;
 	private static final boolean debugMode = false;
 	private static final double cameraSpeed = 0.002; //default => 0.25
@@ -51,10 +52,10 @@ public class Screen extends JPanel {
 	private static long LastMoveTime = 0;
 	private static long LastCubeDeleteTime = 0;
 	private static long LastCubeGenerateTime = 0 ;
-	private int NumberOfDeleteCube = 0 ;
+	private static int  NumberOfDeleteCube = 0 ;
 	private static String dCube = "NONE";
 	Robot r ;
-	static Random random = new Random();
+	Random random = new Random();
 	static final double[] FViewFrom = { -5 , -5 , 10 };
 	static final double[] FViewTo = {  0 , 0 ,  0 };
 	static double[] ViewFrom = FViewFrom.clone(); //カメラの座標
@@ -73,10 +74,10 @@ public class Screen extends JPanel {
 	int[] NewOrder; //配列DPolygonの描画する順番を保持する配列
 	static boolean OutLines = true;
 	boolean[] Control = new boolean[15];//キー入力の情報を格納する配列
-	final static int FontSize = 15;
-	static String condition = "NONE";
+	private final static int FontSize = 15;
+	private static String condition = "NONE";
 	int Press = 10;
-	public static long t ;
+	public static long t ; //時間
 
 	public Screen(){
 		this.addKeyListener(new KeyTyped());
@@ -87,7 +88,9 @@ public class Screen extends JPanel {
 		invisibleMouse();
 
 
-		Cube.add(new Cube(5,5,5,3,3,3,Color.green));
+		Cube.add(new Cube(5,5,5,2,2,2,Color.green));
+		Cube.add(new Cube(5,3,6,2,2,2,Color.blue));
+		Cube.add(new Cube(5,2,7,2,2,2,Color.red));
 
 
 
@@ -167,7 +170,7 @@ public class Screen extends JPanel {
 		//描画更新のインターバル
 		SleepAndRefresh();
 
-		if(firstPersonMode){
+		if(firstPersonMode.get()){
 			hitJudgment();
 		}
 
@@ -191,8 +194,7 @@ public class Screen extends JPanel {
 		double dx = 0.1;
 		double dy = 0.1;
 		for(Cube c : Cube){
-            c.x += dx;
-            c.y += dy;
+			c.reflection(dx,dy,0.1);
 			c.updatePoly();
         }
 	}
@@ -454,7 +456,7 @@ public class Screen extends JPanel {
 		ViewFrom[1] = y;
 		ViewFrom[2] = z;
 
-		if(firstPersonMode){
+		if(firstPersonMode.get()){
 			ViewFrom[2] = height;
 		}else{
 			if(ViewFrom[2] < 0.0) ViewFrom[2] = 0.0;
