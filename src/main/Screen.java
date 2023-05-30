@@ -49,6 +49,7 @@ public class Screen extends JPanel {
 	static Object PolygonOver = null ;
 	private static Object FocusPolygon = null;
 	private static final long deleteInterval = 200;
+	private static final long CubeGenerateInterval = 0; //default -> 100
 	private static long LastMoveTime = 0;
 	private static long LastCubeDeleteTime = 0;
 	private static long LastCubeGenerateTime = 0 ;
@@ -419,8 +420,7 @@ public class Screen extends JPanel {
 		//ランダムなキューブを生成
 		if(Control[8]) {
 			long generate = System.currentTimeMillis();
-			
-			if(Math.abs(LastCubeGenerateTime - generate) > 200) {
+			if(Math.abs(LastCubeGenerateTime - generate) > CubeGenerateInterval) {
 				int rx = random.nextInt(255);
 				int ry = random.nextInt(255);
 				int rz = random.nextInt(255);

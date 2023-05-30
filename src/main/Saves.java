@@ -52,6 +52,7 @@ public final class Saves {
     public void write(String data ,Color c){
         FileWriter fw;
         String nc = c.toString();
+        nc = nc.replaceAll("java.awt.Color" , "");
         // remove "java.awt.Color" from the string
         if(file != null){
             try {

@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.Color;
+import java.util.Random;
 
 public class Cube {
 	//座標
@@ -9,6 +10,8 @@ public class Cube {
 	double[] RotAdd = new double[4];
 	//色情報
 	Color color;
+	Random random = new Random();
+
 	//回転後の座標
 	double x1, x2, x3, x4, y1, y2, y3, y4;
 	DPolygon[] Polys = new DPolygon[6];
@@ -27,16 +30,16 @@ public class Cube {
 	//カメラと離れられる最大距離
 	public static final double maxDis = 100d;
 
-	public boolean moveX = false;
-	public boolean moveY = false;
-	public boolean moveZ = false;
+	public boolean moveX = random.nextBoolean();
+	public boolean moveY = random.nextBoolean();
+	public boolean moveZ = random.nextBoolean();
 
-	public static final double minX = -15d;
-	public static final double minY = -15d;
+	public static final double minX = 0d;
+	public static final double minY = 0d;
 	public static final double minZ = 0d;
 
-	public static final double maxX = 15d;
-	public static final double maxY = 15d;
+	public static final double maxX = 30d;
+	public static final double maxY = 30d;
 	public static final double maxZ = 30d;
 	
 	//座標と色情報からポリゴンを生成
