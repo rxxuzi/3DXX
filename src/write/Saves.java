@@ -1,4 +1,4 @@
-package main;
+package write;
 
 import java.awt.*;
 import java.io.*;
@@ -9,7 +9,8 @@ public final class Saves {
     private int z;
 
     private File file;
-    Saves(String str){
+
+    public Saves(String str){
         this.file = new File(str);
     }
 
@@ -27,6 +28,7 @@ public final class Saves {
             fr.close();
         }catch (IOException e){
             e.printStackTrace();
+            Error.write(e);
         }
     }
 

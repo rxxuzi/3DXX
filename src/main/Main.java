@@ -1,8 +1,10 @@
 package main;
+import write.Error;
+import write.Saves;
+
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.JFrame;
-
 
 /**
  * Project 3DXX
@@ -17,7 +19,7 @@ public class Main {
 	static final long StartUpTime = System.currentTimeMillis();
 	public static Saves saves = new Saves("./rsc/log/data.log");
 	private static final boolean Debug = false;
-
+	public static Error error = new Error();
 	public static boolean displayGround = false;
 
 	public static void main(String[] args){

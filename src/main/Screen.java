@@ -19,6 +19,7 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JPanel;
 import vector.*;
+import write.Error;
 
 import static main.Main.saves;
 
@@ -54,8 +55,8 @@ public class Screen extends JPanel {
 	private static long LastCubeGenerateTime = 0 ;
 	private static int  NumberOfDeleteCube = 0 ;
 	private static String dCube = "NONE"; //削除されたキューブの情報
-	static final double[] FViewFrom = { -5 , -5 , 10 };
-	static final double[] FViewTo = {  0 , 0 ,  0 };
+	static final double[] FViewFrom = { 0 , -2 , 10 };
+	static final double[] FViewTo = {  -2 , 0 ,  5 };
 	public static double[] ViewFrom = FViewFrom.clone(); //カメラの座標
 	public static double[] ViewTo   = FViewTo.clone();	  //オブジェクトの座標
 	public static double zoom = 1000;
@@ -80,6 +81,7 @@ public class Screen extends JPanel {
 	public static long t ; //時間
 	Robot r ;
 	Random random = new Random();
+    Error ex = new Error();
 
 	public Screen(){
 		this.addKeyListener(new KeyTyped());
@@ -159,6 +161,7 @@ public class Screen extends JPanel {
 			g.drawString("Focus Polys ID : " + FocusPolygon.toString() , 10 ,170);
 		}catch (NullPointerException e){
             g.drawString("Focus Polys ID : " + "NULL" , 10 ,170);
+            Error.write(e);
         }
 		g.drawString(t +"s", 10,200);
 		g.setFont(new Font(Font.SANS_SERIF , Font.BOLD , 20));
@@ -206,7 +209,7 @@ public class Screen extends JPanel {
 			try {
 				Thread.sleep((long) (1000.0/MaxFPS - timeSLU));
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+                Error.write(e);
 			}
 		}
 		LastRefresh = System.currentTimeMillis();
@@ -564,7 +567,7 @@ public class Screen extends JPanel {
 				r = new Robot();
 				r.mouseMove((int)Main.screenSize.getWidth()/2, (int)Main.screenSize.getHeight()/2);
 			} catch (AWTException e) {
-				e.printStackTrace();
+                Error.write(e);
 			}
 		}
 		
