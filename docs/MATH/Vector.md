@@ -43,15 +43,15 @@
 
 1. 最初のベクトルを正規化する。最初の直交ベクトルを $\mathbf{u}_1$ とし、次のように計算する：
 
-$ \mathbf{u}_1 = \frac{\mathbf{v}_1}{\|\mathbf{v}_1\|} $
+$\mathbf{u}_1 = \frac{\mathbf{v}_1}{\|\mathbf{v}_1\|} $
 
 ここで $\|\mathbf{v}_1\|$ はベクトル $\mathbf{v}_1$ のノルム（長さ）を表す。
 
 2. 2番目のベクトルを正規化する。2番目の直交ベクトルを $\mathbf{u}_2$ とし、以下の手順で計算する：
 
-$ \mathbf{u}_2 = \frac{\mathbf{v}_2 - (\mathbf{u}_1 \cdot \mathbf{v}_2)\mathbf{u}_1}{\|\mathbf{v}_2 - (\mathbf{u}_1 \cdot \mathbf{v}_2)\mathbf{u}_1\|} $
+$\mathbf{u}_2 = \frac{\mathbf{v}_2 - (\mathbf{u}_1 \cdot \mathbf{v}_2)\mathbf{u}_1}{\|\mathbf{v}_2 - (\mathbf{u}_1 \cdot \mathbf{v}_2)\mathbf{u}_1\|} $
 
-ここで、$(\mathbf{u}_1 \cdot \mathbf{v}_2)$ は $\mathbf{u}_1$ と $\mathbf{v}_2$ の内積を表す。
+ここで、$\mathbf{u}_1 \cdot \mathbf{v}_2$ は $\mathbf{u}_1$ と $\mathbf{v}_2$ の内積を表す。
 
 3. 3番目のベクトルを正規化する。3番目の直交ベクトルを $\mathbf{u}_3$ とし、以下の手順で計算する：
 
