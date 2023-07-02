@@ -51,7 +51,7 @@ $\mathbf{u}_1 = \frac{\mathbf{v}_1}{\|\mathbf{v}_1\|} $
 
 $\mathbf{u}_2 = \frac{\mathbf{v}_2 - (\mathbf{u}_1 \cdot \mathbf{v}_2)\mathbf{u}_1}{\|\mathbf{v}_2 - (\mathbf{u}_1 \cdot \mathbf{v}_2)\mathbf{u}_1\|} $
 
-ここで、$(\mathbf{u}_1 \cdot \mathbf{v}_2)$ は $\mathbf{u}_1$ と $\mathbf{v}_2$ の内積を表す。
+ここで、$\mathbf{u}_1 \cdot \mathbf{v}_2 $ は $\mathbf{u}_1$ と $\mathbf{v}_2$ の内積を表す。
 
 3. 3番目のベクトルを正規化する。3番目の直交ベクトルを $\mathbf{u}_3$ とし、以下の手順で計算する：
 
@@ -59,5 +59,3 @@ $\mathbf{u}_3 = \frac{\mathbf{v}_3 - (\mathbf{u}_1 \cdot \mathbf{v}_3)\mathbf{u}
 
 これにより、直交ベクトルの組 $\{\mathbf{u}_1, \mathbf{u}_2, \mathbf{u}_3\}$ を得ることができる。
 これらの直交ベクトルを使用して、3次元ベクトルを2次元ベクトルで描画することができる。
-
-。
