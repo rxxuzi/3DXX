@@ -12,10 +12,10 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.*;
 import java.awt.Point;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
+import java.awt.image.BufferedImage;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JPanel;
 import vector.*;
@@ -55,7 +55,7 @@ public class Screen extends JPanel {
 	private static long LastCubeGenerateTime = 0 ;
 	private static int  NumberOfDeleteCube = 0 ;
 	private static String dCube = "NONE"; //削除されたキューブの情報
-	static final double[] FViewFrom = { 0 , -2 , 10 };
+	static final double[] FViewFrom = { -2 , -2 , 10 };
 	static final double[] FViewTo = {  -2 , 0 ,  5 };
 	public static double[] ViewFrom = FViewFrom.clone(); //カメラの座標
 	public static double[] ViewTo   = FViewTo.clone();	  //オブジェクトの座標
@@ -206,6 +206,7 @@ public class Screen extends JPanel {
 			drawFPS = Checks/((System.currentTimeMillis() - LastFPSCheck)/1000.0);
 			LastFPSCheck = System.currentTimeMillis();
 			Checks = 0;
+//			System.gc();
 		}
 
 		if(timeSLU < 1000.0/MaxFPS){
@@ -256,7 +257,7 @@ public class Screen extends JPanel {
 	 * Control7が押された時、フォーカスしているキューブを特定して削除する
 	 *　連続で消えるのを防ぐ為、delete intervalを設けている
 	 */
-	int msd = 1000;
+
 	private void deleteCube() {
 		if(Control[7]) {
 			if(System.currentTimeMillis() - LastCubeDeleteTime >= deleteInterval) {
@@ -268,6 +269,7 @@ public class Screen extends JPanel {
 							LastCubeDeleteTime = System.currentTimeMillis();
 							NumberOfDeleteCube ++ ;
 							condition = "CUBE DELETED : " + dCube;
+
 							break;
 						}
 					}

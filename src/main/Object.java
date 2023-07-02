@@ -15,7 +15,6 @@ public class Object {
 		for(int i = 0; i<x.length; i++) {
 			P.addPoint( (int)x[i] , (int)y[i] );			
 		}
-		
 		this.c = c;
 		this.seeThrough = seeThrough;
 	}

@@ -2,20 +2,22 @@ package vector;
 
 import main.Screen;
 
-/*DPolygon.classの計算用class*/
+/**
+ * @author rxxuzi
+ * DPolygon.classの計算用class
+ * */
 public class Calculator {
 	public static double t = 0;
 	static Vector RVector1, RVector2, ViewVector, RotationVector, DirectionVector, PlaneVector1, PlaneVector2;
 	static Plane P;
 	public static double[] CalculateFocusPosition = new double[2];
-	/*X , Y 座標の描画の計算*/
+	/* X , Y 座標の描画の計算*/
 	public static double[] CalculatePositionP(double[] ViewFrom, double[] ViewTo, double x, double y, double z){
 		double[] projP = getProject(ViewFrom, ViewTo, x, y, z, P);
 		return getDrawP(projP[0], projP[1], projP[2]);
 	}
 
 	static double[] getProject(double[] ViewFrom, double[] ViewTo, double x, double y, double z, Plane P){
-		
 		//視点からとあるポイントまでのベクトル
 		Vector ViewToPoint = new Vector(x - ViewFrom[0], y - ViewFrom[1], z - ViewFrom[2]);
 		
@@ -80,7 +82,6 @@ public class Calculator {
 		RVector1 = ViewVector.CrossProduct(RotationVector);
 		//回転ベクトル2
 		RVector2 = ViewVector.CrossProduct(RVector1);
-		
 		
 		CalculateFocusPosition = Calculator.CalculatePositionP(Screen.ViewFrom, Screen.ViewTo, Screen.ViewTo[0], Screen.ViewTo[1], Screen.ViewTo[2]);
 		
