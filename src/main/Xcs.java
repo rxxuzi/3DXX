@@ -3,7 +3,7 @@ package main;
 import javax.swing.*;
 import java.awt.*;
 
-@SuppressWarnings("unused")
+@Deprecated
 public class Xcs extends JPanel {
     private double t = 0;
     private double st = 1d;

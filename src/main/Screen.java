@@ -102,6 +102,7 @@ public class Screen extends JPanel {
 
 		new Ground();
 		new Floor();
+        new TextToObject("./rsc/summon.txt");
 
 	}
 	/*ï`âÊÇ…ä÷Ç∑ÇÈÉÅÉ\ÉbÉh*/
@@ -189,8 +190,10 @@ public class Screen extends JPanel {
 		double dx = 0.1;
 		double dy = 0.1;
 		for(Cube c : Cube){
-			c.reflection(dx,dy,0.1);
-			c.updatePoly();
+            if(c.move){
+                c.reflection(dx,dy,0.1);
+                c.updatePoly();
+            }
         }
 	}
 

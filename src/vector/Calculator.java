@@ -11,8 +11,7 @@ public class Calculator {
 	/*X , Y ç¿ïWÇÃï`âÊÇÃåvéZ*/
 	public static double[] CalculatePositionP(double[] ViewFrom, double[] ViewTo, double x, double y, double z){
 		double[] projP = getProject(ViewFrom, ViewTo, x, y, z, P);
-		double[] drawP = getDrawP(projP[0], projP[1], projP[2]);
-		return drawP;
+		return getDrawP(projP[0], projP[1], projP[2]);
 	}
 
 	static double[] getProject(double[] ViewFrom, double[] ViewTo, double x, double y, double z, Plane P){
