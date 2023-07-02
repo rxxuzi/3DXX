@@ -2,7 +2,7 @@
   <artifact type="jar" name="3Dsnake:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/3Dsnake_jar</output-path>
     <root id="archive" name="3Dsnake.jar">
-      <element id="module-output" name="3Dsnake" />
+      <element id="module-output" name="3DXX" />
     </root>
   </artifact>
 </component>

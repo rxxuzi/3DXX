@@ -14,6 +14,8 @@ public class Ground {
     public static final int MAP_SIZE = 50;
     public static final int Maximum_Height = 5;
 
+    public static boolean Debug = false;
+
 
     static double ROUGHNESS = 2d; //隆起
 
@@ -27,12 +29,11 @@ public class Ground {
         double[] values2 = new double[values1.length];
 
         for (int y = 0; y < MAP_SIZE/2; y+=2){
-            boolean[] arr = new boolean[MAP_SIZE];
+            boolean[] arr = new boolean[MAP_SIZE]; //色を決める
 
             for(int x = 0; x < MAP_SIZE; x++){
                 values1[x] = values2[x];
                 if(r.nextInt(100) > 50){
-//                    values2[x] = r.nextDouble() * ROUGHNESS * 5;
                     values2[x] = r.nextInt(Maximum_Height) + 3;
                     arr[x] = true;
                 }else {
@@ -42,11 +43,18 @@ public class Ground {
             }
 
             if(y != 0){
+                //隆起したポリゴン
                 for (int x = 0; x < MAP_SIZE/2; x++) {
                     Screen.DPolygons.add(new DPolygon(new double[]{(SIZE * x), (SIZE * x), SIZE + (SIZE * x)}, new double[]{(SIZE * y), SIZE + (SIZE * y), SIZE + (SIZE * y)}, new double[]{values1[x], values2[x], values2[x+1]}, G, false));
                     Screen.DPolygons.add(new DPolygon(new double[]{(SIZE * x), SIZE + (SIZE * x), SIZE + (SIZE * x)}, new double[]{(SIZE * y), SIZE + (SIZE * y), (SIZE * y)}, new double[]{values1[x], values2[x+1], values1[x+1]}, G, false));
                     if (arr[x]){
-                        G = new Color(200, 255, 50);
+
+                        if(Debug){
+                            G = new Color(200, 255, 50);
+                        }else {
+                            G = new Color(200, 255, 250);
+                        }
+//                        G = new Color(200, 255, 50);
                     }else {
                         G = new Color(150, 150, 150);
                     }

@@ -5,10 +5,11 @@ import javax.swing.JFrame;
 
 
 /**
- * Project 3DX
+ * Project 3DXX
  * (3D snake)
  * @author Rxxuzi
- * @version 4.0
+ * @version 4.2.1
+ * @since 2023-07-02
  *
  */
 public class Main {

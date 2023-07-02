@@ -506,6 +506,8 @@ public class Screen extends JPanel {
 	
 	/*キー入力用class*/
 	class KeyTyped extends KeyAdapter{
+
+		public boolean Tab = false;
 		
 		//キーを押した時にtrue
 		public void keyPressed(KeyEvent e) {
@@ -530,6 +532,10 @@ public class Screen extends JPanel {
 					break;
 				case KeyEvent.VK_ENTER : Control[10] = true ; break;
 				case KeyEvent.VK_ESCAPE : System.exit(0); break; //Escapeキーを押すと終了
+				case KeyEvent.VK_TAB:
+					Tab = !Tab;
+					Ground.Debug =  !Ground.Debug;
+					break; //タブキャラセット
 			}
 
 		}

@@ -7,25 +7,6 @@ public final class Saves {
     private int x;
     private int y;
     private int z;
-    private int d;
-    private Color color;
-    public static boolean isGameOver = false;
-    public static boolean isGameStarted = false;
-    public static boolean isGamePaused = false;
-    public static boolean isGameWon = false;
-    public static boolean isGameLost = false;
-    public static boolean isGameRestarted = false;
-    public static boolean isGameQuit = false;
-    public static boolean isGameStartedFromMainMenu = false;
-    public static boolean isGameStartedFromGameOver = false;
-    public static boolean isGameStartedFromGameWon = false;
-    public static boolean isGameStartedFromGameLost = false;
-    public static boolean isGameStartedFromGameRestarted = false;
-    public static boolean isGameStartedFromGameQuit = false;
-    public static boolean isGameStartedFromGamePause = false;
-    public static boolean isGameStartedFromGameResume = false;
-    public static boolean isGameStartedFromGameRestart = false;
-    public static boolean isGameStartedFromGameQuitFromGameOver = false;
 
     private File file;
     Saves(String str){
