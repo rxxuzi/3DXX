@@ -1,5 +1,6 @@
 package main;
 import com.sun.xml.internal.ws.developer.Serialization;
+import vector.Vector;
 
 import java.awt.AWTException;
 import java.awt.Color;
@@ -17,6 +18,7 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JPanel;
+import vector.*;
 
 import static main.Main.saves;
 
@@ -24,7 +26,7 @@ import static main.Main.saves;
 * Main.javaのFrameにパネルとしてaddするclass
 * */
 public class Screen extends JPanel {
-	@Serialization
+    @Serialization
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -41,10 +43,9 @@ public class Screen extends JPanel {
 	public static ArrayList<DPolygon> DPolygons = new ArrayList<>();
 	public static ArrayList<Cube> Cube = new ArrayList<>();
 	public static ArrayList<Pyramid> Pyramid = new ArrayList<>();
-	public static ArrayList<Double> Floor = new ArrayList<>();
-	private static final int[] colorBox = new int[256 * 256 * 256];
+    private static final int[] colorBox = new int[256 * 256 * 256];
 	private static int counter1 = 0;
-	static Object PolygonOver = null ;
+	static Object PolygonOver = null ; //カーソル上のポリゴンの情報
 	private static Object FocusPolygon = null;
 	private static final long deleteInterval = 200;
 	private static final long CubeGenerateInterval = 0; //default -> 100
@@ -52,12 +53,14 @@ public class Screen extends JPanel {
 	private static long LastCubeDeleteTime = 0;
 	private static long LastCubeGenerateTime = 0 ;
 	private static int  NumberOfDeleteCube = 0 ;
-	private static String dCube = "NONE";
+	private static String dCube = "NONE"; //削除されたキューブの情報
 	static final double[] FViewFrom = { -5 , -5 , 10 };
 	static final double[] FViewTo = {  0 , 0 ,  0 };
-	static double[] ViewFrom = FViewFrom.clone(); //カメラの座標
-	static double[] ViewTo   = FViewTo.clone();	  //オブジェクトの座標
-	static double zoom = 1000, MinZoom = 100, MaxZoom = 5000;
+	public static double[] ViewFrom = FViewFrom.clone(); //カメラの座標
+	public static double[] ViewTo   = FViewTo.clone();	  //オブジェクトの座標
+	public static double zoom = 1000;
+    static double MinZoom = 100;
+    static double MaxZoom = 5000;
 	static double MouseX = 0 , MouseY = 0; //マウスの座標
 	static double MovementSpeed = 0.5; //マウスのスピード
 	double drawFPS = 0;
@@ -96,7 +99,7 @@ public class Screen extends JPanel {
 		new Ball(3,3,3,4,4,4,Color.MAGENTA);
 
 		new Ground();
-//		new Floor();
+		new Floor();
 
 	}
 	/*描画に関するメソッド*/
@@ -171,16 +174,6 @@ public class Screen extends JPanel {
 
 		if(firstPersonMode.get()){
 			hitJudgment();
-		}
-
-		if(debugMode){
-			int[] hx1 = new int[6];
-			int[] hy1 = new int[6];
-			for(int i = 0; i < 6; i++){
-				hx1[i] = (int) (100 * Math.cos(i * Math.PI * 2 / 6) + 300);
-				hy1[i] = (int) (100 * Math.sin(i * Math.PI * 2 / 6) + 500);
-			}
-			g.fillPolygon(hx1 , hy1 , Ball.hx1.length);
 		}
 
 		for(main.Cube c : Cube){
@@ -302,17 +295,17 @@ public class Screen extends JPanel {
 		平均距離の短い順にソートする
 		 (バブルソート)
 		*/
-		double dtmp ;
+		double d_tmp ;
 		int itmp;
 		for(int i = 0 ; i < k.length - 1 ; i++) {
 			for(int j = 0 ; j < k.length - 1 ; j++) {
 				if(k[j] < k[j + 1]) {
-					dtmp = k[j];
+					d_tmp = k[j];
 					itmp = NewOrder[j];
 					NewOrder[j] = NewOrder[j + 1];
 					k[j] = k[j + 1];
 					NewOrder[j + 1] = itmp;
-					k[j + 1] = dtmp;
+					k[j + 1] = d_tmp;
 				}
 			}
 		}

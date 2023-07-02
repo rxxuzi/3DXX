@@ -1,4 +1,6 @@
-package main;
+package vector;
+
+import main.DPolygon;
 
 public class Plane {
 	Vector V1, V2, NV;
@@ -8,7 +10,6 @@ public class Plane {
 		P[0] = DP.x[0]; 
 		P[1] = DP.y[0]; 
 		P[2] = DP.z[0]; 
-
 
 		V1 = new Vector(DP.x[1] - DP.x[0], 
 		        		DP.y[1] - DP.y[0], 

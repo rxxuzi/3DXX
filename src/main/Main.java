@@ -18,6 +18,8 @@ public class Main {
 	public static Saves saves = new Saves("./rsc/log/data.log");
 	private static final boolean Debug = false;
 
+	public static boolean displayGround = false;
+
 	public static void main(String[] args){
 		JFrame jf = new JFrame();
 		Screen Core = new Screen();

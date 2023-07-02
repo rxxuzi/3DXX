@@ -1,10 +1,14 @@
 package main;
+import vector.Calculator;
+
 import java.awt.Color;
 
 
 public class DPolygon {
 	Color c;
-	double[] x, y, z;
+	public double[] x;
+	public double[] y;
+	public double[] z;
 	boolean draw = true, seeThrough = false;
 	double[] CalculatorPosition, nx, ny;
 	Object DrawablePolygon;

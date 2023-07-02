@@ -1,12 +1,15 @@
-package main;
+package vector;
+
+import main.Screen;
+
 /*DPolygon.classの計算用class*/
 public class Calculator {
-	static double t = 0;
+	public static double t = 0;
 	static Vector RVector1, RVector2, ViewVector, RotationVector, DirectionVector, PlaneVector1, PlaneVector2;
 	static Plane P;
-	static double[] CalculateFocusPosition = new double[2];
+	public static double[] CalculateFocusPosition = new double[2];
 	/*X , Y 座標の描画の計算*/
-	static double[] CalculatePositionP(double[] ViewFrom, double[] ViewTo, double x, double y, double z){		
+	public static double[] CalculatePositionP(double[] ViewFrom, double[] ViewTo, double x, double y, double z){
 		double[] projP = getProject(ViewFrom, ViewTo, x, y, z, P);
 		double[] drawP = getDrawP(projP[0], projP[1], projP[2]);
 		return drawP;
@@ -56,9 +59,9 @@ public class Calculator {
 		return V;
 	}
 	
-	static void VectorInfo(){
+	public static void VectorInfo(){
 		/*ベクトル計算　(xの始点 - xの終点) , (yの始点 - yの終点) , (zの始点 - zの終点)*/
-		ViewVector = new Vector(Screen.ViewTo[0] - Screen.ViewFrom[0], Screen.ViewTo[1] - Screen.ViewFrom[1], Screen.ViewTo[2] - Screen.ViewFrom[2]);			
+		ViewVector = new Vector(Screen.ViewTo[0] - Screen.ViewFrom[0], Screen.ViewTo[1] - Screen.ViewFrom[1], Screen.ViewTo[2] - Screen.ViewFrom[2]);
 		//方向ベクトル (単位ベクトル)
 		DirectionVector = new Vector(1, 1, 1);	
 		

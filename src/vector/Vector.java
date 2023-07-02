@@ -1,8 +1,10 @@
-package main;
+package vector;
 
 
 public class Vector {
-	double x, y, z;
+	public double x;
+	public double y;
+	public double z;
 	public Vector(double x, double y, double z){
 		/*ベクトルの大きさを計算*/
 		double length = Length(x,y,z);
@@ -18,7 +20,7 @@ public class Vector {
 		return Math.sqrt(x*x + y*y + z*z);
 	}
 	/*ベクトルの直角に交差するベクトルの作成*/
-	Vector CrossProduct(Vector V){
+	public Vector CrossProduct(Vector V){
 		return new Vector(
 				y * V.z - z * V.y,
 				z * V.x - x * V.z,
