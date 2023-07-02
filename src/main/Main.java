@@ -1,9 +1,7 @@
 package main;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.io.File;
 import javax.swing.JFrame;
-import javax.swing.JTextField;
 
 
 /**
@@ -13,8 +11,8 @@ import javax.swing.JTextField;
  * @version 4.0
  *
  */
-public class Main{	
-	static Dimension ScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
+public class Main {
+	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	static final long StartUpTime = System.currentTimeMillis();
 	public static Saves saves = new Saves("./rsc/log/data.log");
 	private static final boolean Debug = false;
@@ -28,7 +26,7 @@ public class Main{
 			jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		}else {
 			jf.setUndecorated(true);
-			jf.setSize(ScreenSize);
+			jf.setSize(screenSize);
 			jf.getJMenuBar();
 			jf.add(Core);
 		}

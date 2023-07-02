@@ -57,6 +57,6 @@ public class Object {
 	}
 	
 	public boolean MouseOver(){
-		return P.contains(Main.ScreenSize.getWidth()/2, Main.ScreenSize.getHeight()/2);
+		return P.contains(Main.screenSize.getWidth()/2, Main.screenSize.getHeight()/2);
 	}
 }

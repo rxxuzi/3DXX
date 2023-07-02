@@ -27,7 +27,6 @@ public class Screen extends JPanel {
 	@Serialization
 	private static final long serialVersionUID = 1L;
 
-
 	/**
 	 * fpsModeをTrueにすると以下のことが起こります
 	 * * 1.重力の追加(浮遊できなくなる)
@@ -54,8 +53,6 @@ public class Screen extends JPanel {
 	private static long LastCubeGenerateTime = 0 ;
 	private static int  NumberOfDeleteCube = 0 ;
 	private static String dCube = "NONE";
-	Robot r ;
-	Random random = new Random();
 	static final double[] FViewFrom = { -5 , -5 , 10 };
 	static final double[] FViewTo = {  0 , 0 ,  0 };
 	static double[] ViewFrom = FViewFrom.clone(); //カメラの座標
@@ -78,6 +75,8 @@ public class Screen extends JPanel {
 	private static String condition = "NONE";
 	int Press = 10;
 	public static long t ; //時間
+	Robot r ;
+	Random random = new Random();
 
 	public Screen(){
 		this.addKeyListener(new KeyTyped());
@@ -100,11 +99,11 @@ public class Screen extends JPanel {
 //		new Floor();
 
 	}
-
 	/*描画に関するメソッド*/
+
 	public void paintComponent(Graphics g){
 		//描画リセット
-		g.clearRect(0, 0, (int)Main.ScreenSize.getWidth(), (int)Main.ScreenSize.getHeight());
+		g.clearRect(0, 0, (int)Main.screenSize.getWidth(), (int)Main.screenSize.getHeight());
 
 		//カメラを動かす
 		KeyControl();
@@ -330,8 +329,8 @@ public class Screen extends JPanel {
 	//マウスエイムを描画
 	private void drawMouseAim(Graphics g){
 		g.setColor(Color.black);
-		g.drawLine((int)(Main.ScreenSize.getWidth()/2 - aimSight), (int)(Main.ScreenSize.getHeight()/2), (int)(Main.ScreenSize.getWidth()/2 + aimSight), (int)(Main.ScreenSize.getHeight()/2));
-		g.drawLine((int)(Main.ScreenSize.getWidth()/2), (int)(Main.ScreenSize.getHeight()/2 - aimSight), (int)(Main.ScreenSize.getWidth()/2), (int)(Main.ScreenSize.getHeight()/2 + aimSight));
+		g.drawLine((int)(Main.screenSize.getWidth()/2 - aimSight), (int)(Main.screenSize.getHeight()/2), (int)(Main.screenSize.getWidth()/2 + aimSight), (int)(Main.screenSize.getHeight()/2));
+		g.drawLine((int)(Main.screenSize.getWidth()/2), (int)(Main.screenSize.getHeight()/2 - aimSight), (int)(Main.screenSize.getWidth()/2), (int)(Main.screenSize.getHeight()/2 + aimSight));
 	}
 
 
@@ -482,9 +481,9 @@ public class Screen extends JPanel {
 
 	private void MouseMovement(double NewX, double NewY){		
 		//マウスがy軸(スクリーンの中央)からどれだけはなれたか計測
-		double difX = (NewX - Main.ScreenSize.getWidth()/2);
+		double difX = (NewX - Main.screenSize.getWidth()/2);
 		//マウスがx軸(スクリーンの中央)からどれだけはなれたか計測
-		double difY = (NewY - Main.ScreenSize.getHeight()/2);
+		double difY = (NewY - Main.screenSize.getHeight()/2);
 		difY *= 6 - Math.abs(VerticalLook) * 5;
 		
 		VerticalLook   -= difY  / VerticalRotationSpeed;
@@ -564,7 +563,7 @@ public class Screen extends JPanel {
 		void CenterMouse(){
 			try {
 				r = new Robot();
-				r.mouseMove((int)Main.ScreenSize.getWidth()/2, (int)Main.ScreenSize.getHeight()/2);
+				r.mouseMove((int)Main.screenSize.getWidth()/2, (int)Main.screenSize.getHeight()/2);
 			} catch (AWTException e) {
 				e.printStackTrace();
 			}
@@ -617,10 +616,8 @@ public class Screen extends JPanel {
 			}else{
 				if(zoom < MaxZoom) zoom -= 25 * e.getUnitsToScroll();
 				condition = "Zoom in";
-			}	
-			
+			}
 		}
-		
 	}
 
 	@Override

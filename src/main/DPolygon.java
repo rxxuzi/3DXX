@@ -33,8 +33,8 @@ public class DPolygon {
 		
 		for(int  i = 0 ; i < x.length ; i ++ ) {
 			CalculatorPosition = Calculator.CalculatePositionP(Screen.ViewFrom, Screen.ViewTo, x[i], y[i], z[i]);
-			nx[i] = (Main.ScreenSize.getWidth()  / 2 - Calculator.CalculateFocusPosition[0]) + CalculatorPosition[0] * Screen.zoom; 
-			ny[i] = (Main.ScreenSize.getHeight() / 2 - Calculator.CalculateFocusPosition[1]) + CalculatorPosition[1] * Screen.zoom; 
+			nx[i] = (Main.screenSize.getWidth()  / 2 - Calculator.CalculateFocusPosition[0]) + CalculatorPosition[0] * Screen.zoom;
+			ny[i] = (Main.screenSize.getHeight() / 2 - Calculator.CalculateFocusPosition[1]) + CalculatorPosition[1] * Screen.zoom;
 			
 			//視点の後ろにオブジェクトがある場合、描画しない
 			if(Calculator.t < 0 ) {

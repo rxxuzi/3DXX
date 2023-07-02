@@ -17,10 +17,7 @@ public class Test {
         for (int y = 0 ; y < w.length ; y++) {
             w[y] = r.nextInt(10);
         }
-
-
         System.out.println(Arrays.toString(v));
         System.out.println(Arrays.toString(w));
-
     }
 }
