@@ -42,44 +42,24 @@
 
 1. 最初のベクトルを正規化します。最初の直交ベクトルを $\mathbf{u}_1$ とし、次のように計算します：
 
-$ mathbf{u}_1 = \frac{\mathbf{v}_1}{\|\mathbf{v}_1\|} $
+$ \mathbf{u}_1 = \frac{\mathbf{v}_1}{\|\mathbf{v}_1\|} $
 
 ここで $\|\mathbf{v}_1\|$ はベクトル $\mathbf{v}_1$ のノルム（長さ）を表します。
 
 2. 2番目のベクトルを正規化します。2番目の直交ベクトルを $\mathbf{u}_2$ とし、以下の手順で計算します：
 
-$ \[
-\mathbf{u}_2 = \frac{\mathbf{v}_2 - (\mathbf{u}_1 \cdot \mathbf{v}_2)\mathbf{u}_1}{\|\mathbf{v}_2 - (\mathbf{u}_1 \cdot \mathbf{v}_2)\mathbf{u}_1\|}
-\] $
+$ \mathbf{u}_2 = \frac{\mathbf{v}_2 - (\mathbf{u}_1 \cdot \mathbf{v}_2)\mathbf{u}_1}{\|\mathbf{v}_2 - (\mathbf{u}_1 \cdot \mathbf{v}_2)\mathbf{u}_1\|} $
 
 ここで、$(\mathbf{u}_1 \cdot \mathbf{v}_2)$ は $\mathbf{u}_1$ と $\mathbf{v}_2$ の内積を表します。
 
 3. 3番目のベクトルを正規化します。3番目の直交ベクトルを $\mathbf{u}_3$ とし、以下の手順で計算します：
 
-\[
-\mathbf{u}_3 = \frac{\mathbf{v}_3 - (\mathbf{u}_1 \cdot \mathbf{v}_3)\mathbf{u}_1 - (\mathbf{u}_2 \cdot \mathbf{v}_3)\mathbf{u}_2}{\|\mathbf{v}_3 - (\mathbf{u}_1 \cdot \mathbf{v}_3)\mathbf{u}_1 - (\mathbf{u}_2 \cdot \mathbf{v}_3)\mathbf{u}_2\|}
-\]
+$\mathbf{u}_3 = \frac{\mathbf{v}_3 - (\mathbf{u}_1 \cdot \mathbf{v}_3)\mathbf{u}_1 - (\mathbf{u}_2 \cdot \mathbf{v}_3)\mathbf{u}_2}{\|\mathbf{v}_3 - (\mathbf{u}_1 \cdot \mathbf{v}_3)\mathbf{u}_1 - (\mathbf{u}_2 \cdot \mathbf{v}_3)\mathbf{u}_2\|} $
 
 これにより、直交ベクトルの組 $\{\mathbf{u}_1, \mathbf{u}_2, \mathbf{u}_3\}$ を得ることができます。これらの直交ベクトルを使用して、3次元ベクトルを2次元ベクトルで描画することができます。
 
 以上が
 
 グラム・シュミットの正規直交化法の手順です。
-
-以下に、グラム・シュミットの正規直交化法の手順をTeXコードで表示します：
-
-```tex
-% ベクトルの組
-\mathbf{v}_1, \mathbf{v}_2, \mathbf{v}_3
-
-% 1番目の直交ベクトル
-\mathbf{u}_1 = \frac{\mathbf{v}_1}{\|\mathbf{v}_1\|}
-
-% 2番目の直交ベクトル
-\mathbf{u}_2 = \frac{\mathbf{v}_2 - (\mathbf{u}_1 \cdot \mathbf{v}_2)\mathbf{u}_1}{\|\mathbf{v}_2 - (\mathbf{u}_1 \cdot \mathbf{v}_2)\mathbf{u}_1\|}
-
-% 3番目の直交ベクトル
-\mathbf{u}_3 = \frac{\mathbf{v}_3 - (\mathbf{u}_1 \cdot \mathbf{v}_3)\mathbf{u}_1 - (\mathbf{u}_2 \cdot \mathbf{v}_3)\mathbf{u}_2}{\|\mathbf{v}_3 - (\mathbf{u}_1 \cdot \mathbf{v}_3)\mathbf{u}_1 - (\mathbf{u}_2 \cdot \mathbf{v}_3)\mathbf{u}_2\|}
-```
 
 このようにして、グラム・シュミットの正規直交化法を用いて3次元ベクトルを2次元ベクトルで描画することができます。
