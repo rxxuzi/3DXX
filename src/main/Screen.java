@@ -1,5 +1,6 @@
 package main;
 import com.sun.xml.internal.ws.developer.Serialization;
+import jdk.jfr.BooleanFlag;
 import shot.Json;
 import shot.Picture;
 import vector.Vector;
@@ -57,8 +58,6 @@ public class Screen extends JPanel {
 	private static long LastMoveTime = 0;
 	private static long LastCubeDeleteTime = 0;
 	private static long LastCubeGenerateTime = 0 ;
-	private static int  NumberOfDeleteCube = 0 ;
-	private static String dCube = "NONE"; //削除されたキューブの情報
 	static final double[] FViewFrom = { -2 , -2 , 10 };
 	static final double[] FViewTo = {  -2 , 0 ,  5 };
 	public static double[] ViewFrom = FViewFrom.clone(); //カメラの座標
@@ -86,9 +85,9 @@ public class Screen extends JPanel {
 	public static long t ; //時間
 	Robot r ;
 	Random random = new Random();
-	private Picture p = new Picture();
-    Error ex = new Error();
-
+	private final Picture p = new Picture();
+	@BooleanFlag
+	public boolean Details = false;
 
 	public Screen(){
 		this.addKeyListener(new KeyTyped());
@@ -109,7 +108,7 @@ public class Screen extends JPanel {
 
 		new Ground();
 		new Floor();
-        new TextToObject("./rsc/summon.txt");
+        new TextToObject("./rsc/object/mario.txt");
 
 	}
 	/*描画に関するメソッド*/
@@ -155,30 +154,32 @@ public class Screen extends JPanel {
 
 		snakeMove();
 
-		g.drawString("FPS : " + (int)drawFPS , 10, 15);
-		g.drawString("ELAPSED TIME : " + (System.currentTimeMillis() - Main.StartUpTime ) + "ms" , 10 , 30);
-		g.drawString("OBJECT : " + Arrays.toString(ViewTo)   , 10 ,45);
-		g.drawString("CAMERA : " + Arrays.toString(ViewFrom) , 10 ,60);
-		g.drawString("ZOOM   : " + zoom , 10 , 75);
-		g.drawString("Vertical   Look : " + VerticalLook , 10 , 90);
-		g.drawString("Horizontal Look(rad) : " + HorizontalLook , 10 , 105);
-		g.drawString("Vertical angle   	 : " + (int)VAngle + "°" , 10 ,120);
-		g.drawString("Number Of Polygons : " + DPolygons.size() , 10 ,135);
-		g.drawString("Number Of Cubes    : " + Cube.size() , 10 ,150);
-		try{
-			g.drawString("Focus Polys ID : " + FocusPolygon.toString() , 10 ,170);
-		}catch (NullPointerException e){
-            g.drawString("Focus Polys ID : " + "NULL" , 10 ,170);
-            Error.write(e);
-        }
-		g.drawString(t +"s", 10,200);
-		g.setFont(new Font(Font.SANS_SERIF , Font.BOLD , 20));
-		g.drawString("CONDITION: " + condition , 10 ,190);
+		if(Details){
+			g.drawString("FPS : " + (int)drawFPS , 10, 15);
+			g.drawString("ELAPSED TIME : " + (System.currentTimeMillis() - Main.StartUpTime ) + "ms" , 10 , 30);
+			g.drawString("OBJECT : " + Arrays.toString(ViewTo)   , 10 ,45);
+			g.drawString("CAMERA : " + Arrays.toString(ViewFrom) , 10 ,60);
+			g.drawString("ZOOM   : " + zoom , 10 , 75);
+			g.drawString("Vertical   Look : " + VerticalLook , 10 , 90);
+			g.drawString("Horizontal Look(rad) : " + HorizontalLook , 10 , 105);
+			g.drawString("Vertical angle   	 : " + (int)VAngle + "°" , 10 ,120);
+			g.drawString("Number Of Polygons : " + DPolygons.size() , 10 ,135);
+			g.drawString("Number Of Cubes    : " + Cube.size() , 10 ,150);
+			try{
+				g.drawString("Focus Polys ID : " + FocusPolygon.toString() , 10 ,170);
+			}catch (NullPointerException e){
+				g.drawString("Focus Polys ID : " + "NULL" , 10 ,170);
+				Error.write(e);
+			}
+			g.setFont(new Font(Font.SANS_SERIF , Font.BOLD , 20));
+			g.drawString("CONDITION: " + condition , 10 ,190);
+			g.drawString(Press + "SIZE" , 10 , 220);
+			g.drawString(t +"s", 10,240);
+		}
 
 		if(Control[10]){
 			Press++;
 		}
-		g.drawString(Press + "SIZE" , 10 , 220);
 
 		//描画更新のインターバル
 		SleepAndRefresh();
@@ -271,10 +272,10 @@ public class Screen extends JPanel {
 				for(int i = 0 ; i < Cube.size() ; i ++) {
 					for(int j = 0 ; j < Cube.get(i).Polys.length ; j ++) {
 						if( Cube.get(i).Polys[j].DrawablePolygon.equals(FocusPolygon) ) {
-							dCube = Cube.get(i).toString();
+							//削除されたキューブの情報
+							String dCube = Cube.get(i).toString();
 							Cube.get(i).removeCube();
 							LastCubeDeleteTime = System.currentTimeMillis();
-							NumberOfDeleteCube ++ ;
 							condition = "CUBE DELETED : " + dCube;
 
 							break;
@@ -286,7 +287,6 @@ public class Screen extends JPanel {
 
 		//全削除
 		if(Control[9]) {
-			NumberOfDeleteCube += Cube.size();
 			for(int i = 0 ; i < Cube.size() ; i ++ ) {
 				Cube.get(i).removeCube();
 				condition = "ALL DELETE";
@@ -563,13 +563,13 @@ public class Screen extends JPanel {
 						condition = "Hide outer frame";
 					}
 					break;
-				case KeyEvent.VK_ENTER : Control[10] = true ; break;
+				case KeyEvent.VK_ENTER : Details = !Details; break;
 				case KeyEvent.VK_ESCAPE : System.exit(0); break; //Escapeキーを押すと終了
 				case KeyEvent.VK_TAB:
 					Tab = !Tab;
 					Ground.Debug =  !Ground.Debug;
 					break; //タブキャラセット
-				case KeyEvent.VK_F8: ScreenShot = true;
+				case KeyEvent.VK_P: ScreenShot = true;
 
 			}
 
@@ -589,8 +589,6 @@ public class Screen extends JPanel {
 				case KeyEvent.VK_BACK_SPACE: Control[7] = false ; break;
 				case KeyEvent.VK_R : 	 	 Control[8] = false ; break;
 				case KeyEvent.VK_DELETE :Control[9] = false ; break;
-				case KeyEvent.VK_ENTER: Control[10] = false ; break;
-				case KeyEvent.VK_F8: ScreenShot = false;
 			}
 		}
 	}

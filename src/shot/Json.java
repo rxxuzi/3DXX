@@ -25,10 +25,8 @@ public class Json {
         File file = new File(filepath);
         if (file.exists()) {
             if(file.delete()){
-                System.out.println("file deleted");
+                System.out.println("file deleted : " + filepath);
             }
-        }else{
-            System.out.println("making file !" + filepath);
         }
     }
 

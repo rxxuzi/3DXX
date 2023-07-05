@@ -2,6 +2,7 @@ package shot;
 
 import main.Main;
 import main.Screen;
+import write.Error;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -35,6 +36,7 @@ public class Picture {
             Screen.condition = "take picture";
         }catch (Exception e) {
             e.printStackTrace();
+            Error.write(e);
         }
         System.gc();
     }

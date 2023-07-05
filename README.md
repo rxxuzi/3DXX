@@ -5,6 +5,7 @@ This is the 3D engine production project.
 ![img.png](docs/README/img.png)
 
 ## 移動方法
+
 + `W` : 前進
 + `S` : 後進
 + `D` : 右へ移動
@@ -33,7 +34,7 @@ This is the 3D engine production project.
 ## システム
 
 + `Escape` : システムが終了します。
-+ `F8` : スクリーンショットを撮影します
++ `P` : スクリーンショットを撮影します
 
 # 技術関連
 
