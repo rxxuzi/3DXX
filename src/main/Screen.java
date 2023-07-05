@@ -1,6 +1,6 @@
 package main;
 import com.sun.xml.internal.ws.developer.Serialization;
-import shot.Log4Cube;
+import shot.Json;
 import shot.Picture;
 import vector.Vector;
 
@@ -445,10 +445,9 @@ public class Screen extends JPanel {
 
 		if(ScreenShot){
 			p.take();
-			for (int i = 0; i < Cube.size(); i++) {
-				Log4Cube.write(Cube.get(i).dataArray());
-			}
-            ScreenShot = false;
+			Json json = new Json();
+
+			ScreenShot = false;
 		}
 	}
 

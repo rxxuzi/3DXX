@@ -1,4 +1,5 @@
 package main;
+import shot.Json;
 import write.Error;
 import write.Saves;
 
@@ -8,9 +9,9 @@ import javax.swing.JFrame;
 
 /**
  * Project 3DXX
- * (3D snake)
+ * @implSpec This class is used to initialize the program.
  * @author Rxxuzi
- * @version 4.2.1
+ * @version 4.3.1
  * @since 2023-07-02
  *
  */
@@ -25,6 +26,7 @@ public class Main {
 	public static void main(String[] args){
 		JFrame jf = new JFrame();
 		Screen Core = new Screen();
+		Json json = new Json();
 		if(Debug){
 			jf.setSize(1000,1000);
 			jf.add(new Menu());

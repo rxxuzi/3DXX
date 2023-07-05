@@ -32,6 +32,9 @@ public class Picture {
         String fileName = "test.png";
         String fileType = "png";
 
+        //date and time
+        String  date = java.time.LocalDate.now().toString();
+
         BufferedImage img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
         Graphics g = img.getGraphics();
 

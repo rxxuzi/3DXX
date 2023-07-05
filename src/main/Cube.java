@@ -295,19 +295,15 @@ public class Cube {
 
 
 	public String[] dataArray(){
-		String[] data = new String[11];
+		String[] data = new String[7];
 
-		data[0] = "x: " + x;
-		data[1] = "y: " + y;
-		data[2] = "z: " + z;
-		data[3] = "dx: " + dx;
-		data[4] = "dy: " + dy;
-		data[5] = "dz: " + dz;
-		data[6] = "rotation: " + rotation;
-		data[7] = "isDisplay: " + isDisplay;
-		data[8] = "move:" + move;
-		data[9] = "Polys" + Polys.length;
-        data[10] = "Color: (" + Color.red + " " + Color.green + " " + Color.blue+")";
+		data[0] = "\"x \" : " + x  +", \"y \" : " + y  +", \"z \" : " + z  +",\n";
+		data[1] = "\"dx \": " + dx +", \"dy \": " + dy +", \"dz \": " + dz +",\n";
+		data[2] = "\"rotation \" : " + rotation +",\n";
+		data[3] = "\"isDisplay \" : \"" + isDisplay + "\""+",\n";
+		data[4] = "\"move  \" : " + "\"" + move + "\""+",\n";
+		data[5] = "\"Polys \" : " + Polys.length +",\n";
+		data[6] = "\"Color \" : [" + this.color.getRed() + ", " + this.color.getGreen() + ", " + this.color.getBlue() + "]";
 
         return data;
 	}

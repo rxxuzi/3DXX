@@ -1,23 +1,53 @@
 package main;
 
+import shot.Json;
+
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 public class Test {
     public static void main(String[] args) {
-        Random r = new Random();
+        Json  json = new Json();
+        boolean bol = true;
 
-        int[] v = new int[10];
-        int[] w = new int[10];
+        ArrayList <A> list= new ArrayList<>();
 
-        for (int x = 0 ; x < v.length ; x++) {
-            v[x] = r.nextInt(10);
+        list.add(new A(1));
+        list.add(new A(2));
+        list.add(new A(3));
+        list.add(new A(4));
+        list.add(new A(5));
+
+
+        json.write("{");
+        for (int i = 0; i < list.size(); i++) {
+            if(i != 0) {
+                json.write(",");
+            }
+            json.write("Cube" , i , 1);
+            json.write(list.get(i).data  , 2);
+            if (i == list.size() - 1) {
+                json.write("\n");
+            }
         }
-        for (int y = 0 ; y < w.length ; y++) {
-            w[y] = r.nextInt(10);
-        }
-        System.out.println(Arrays.toString(v));
-        System.out.println(Arrays.toString(w));
+        json.write("}\n");
+
+    }
+
+}
+class A{
+    public String[] data = new String[7];
+    boolean bol = true;
+    public A(int n){
+        data[0] = "\"x \" : " + (n+1) +", \"y \" : " + (n+1) +", \"z \" : " + (n+1) +",\n";
+        data[1] = "\"dx \": " + (n*2) +", \"dy \": " + (n*2) +", \"dz \": " + (n*2) +",\n";
+        data[2] = "\"rotation \" : " + 2+",\n";
+        data[3] = "\"isDisplay \" : \"" + bol + "\""+",\n";
+        data[4] = "\"move  \" : " + "\"" + bol + "\""+",\n";
+        data[5] = "\"Polys \" : " + 6 +",\n";
+        data[6] = "\"Color \" : [" + 255 + ", " + 255 + ", " + 255 + "]";
     }
 }
