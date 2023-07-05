@@ -286,7 +286,6 @@ public class Cube {
 
 
 	void removeCube(){
-		
 		for(int i = 0; i < 6; i ++) {
 			Screen.DPolygons.remove(Polys[i]);			
 		}

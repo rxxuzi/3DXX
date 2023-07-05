@@ -4,7 +4,9 @@ This is the 3D engine production project.
 
 ![img.png](docs/README/img.png)
 
-## 移動方法
+![img](docs/README/img_1.png)
+
+## 移動
 
 + `W` : 前進
 + `S` : 後進
@@ -13,13 +15,14 @@ This is the 3D engine production project.
 + `Space` : 上へ移動 **(正の方向にy軸移動)**
 + `Shift` : 下へ移動 **(負の方向にy軸移動)**
 
-## 視点移動
+## 視点
 
 視点はマウスで動かせます。
 また、マウススクロールでズームが可能です
 
 + `X` : 視点リセット
 + `O` : ポリゴンのアウトラインのON/OFF
++ `Enter` : 詳細メニューの表示/非表示
 
 ## ブロック
 

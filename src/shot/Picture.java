@@ -16,6 +16,13 @@ public class Picture {
     String fileName = "test.png";
     String fileType = "png";
 
+    public Picture() {
+        //make directory
+        File dir = new File(dirPath);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+    }
     public void setFileName(String fileName) {
         this.fileName = fileName  + "." + fileType;
     }

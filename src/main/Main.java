@@ -11,7 +11,7 @@ import javax.swing.JFrame;
  * Project 3DXX
  * @implSpec This class is used to initialize the program.
  * @author Rxxuzi
- * @version 4.3.1
+ * @version 4.3.4
  * @since 2023-07-02
  *
  */

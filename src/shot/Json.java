@@ -17,11 +17,23 @@ public class Json {
                 System.out.println("file deleted");
             }
         }
+        //make directory
+        File dir = new File(dirPath);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
     }
 
     public Json(String filename){
         this.filename = filename;
         this.filepath = dirPath + filename + ".json";
+        //make directory
+        File dir = new File(dirPath);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
         File file = new File(filepath);
         if (file.exists()) {
             if(file.delete()){
