@@ -2,16 +2,17 @@ package main;
 import vector.Calculator;
 
 import java.awt.Color;
+import shot.Picture;
 
 
 public class DPolygon {
-	Color c;
+	public Color c;
 	public double[] x;
 	public double[] y;
 	public double[] z;
 	boolean draw = true, seeThrough = false;
 	double[] CalculatorPosition, nx, ny;
-	Object DrawablePolygon;
+	public Object DrawablePolygon;
 	double AverageDistance;
 
 	public DPolygon(double[] x, double[] y,  double[] z, Color c, boolean seeThrough){

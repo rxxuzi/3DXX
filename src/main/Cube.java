@@ -292,4 +292,23 @@ public class Cube {
 		}
 		Screen.Cube.remove(this);
 	}
+
+
+	public String[] dataArray(){
+		String[] data = new String[11];
+
+		data[0] = "x: " + x;
+		data[1] = "y: " + y;
+		data[2] = "z: " + z;
+		data[3] = "dx: " + dx;
+		data[4] = "dy: " + dy;
+		data[5] = "dz: " + dz;
+		data[6] = "rotation: " + rotation;
+		data[7] = "isDisplay: " + isDisplay;
+		data[8] = "move:" + move;
+		data[9] = "Polys" + Polys.length;
+        data[10] = "Color: (" + Color.red + " " + Color.green + " " + Color.blue+")";
+
+        return data;
+	}
 }

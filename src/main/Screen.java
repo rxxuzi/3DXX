@@ -1,5 +1,7 @@
 package main;
 import com.sun.xml.internal.ws.developer.Serialization;
+import shot.Log4Cube;
+import shot.Picture;
 import vector.Vector;
 
 import java.awt.AWTException;
@@ -72,16 +74,19 @@ public class Screen extends JPanel {
 	double VerticalRotationSpeed = 1000; //垂直回転の速さ
 	double HorizontalRotationSpeed = 500; //水平回転の速さ
 	static final double aimSight = 4;	// センタークロスの大きさ
-	int[] NewOrder; //配列DPolygonの描画する順番を保持する配列
+	public static int[] NewOrder; //配列DPolygonの描画する順番を保持する配列
 	static boolean OutLines = true;
 	boolean[] Control = new boolean[15];//キー入力の情報を格納する配列
+	boolean ScreenShot = false;
 	private final static int FontSize = 15;
-	private static String condition = "NONE";
+	public static String condition = "NONE";
 	int Press = 10;
 	public static long t ; //時間
 	Robot r ;
 	Random random = new Random();
+	private Picture p = new Picture();
     Error ex = new Error();
+
 
 	public Screen(){
 		this.addKeyListener(new KeyTyped());
@@ -141,7 +146,7 @@ public class Screen extends JPanel {
 
 		//フォントの設定
 		Font font = new Font(Font.DIALOG, Font.ITALIC,FontSize);
-		//
+		//角度の計算
 		double VAngle =  Math.toDegrees(Math.tan(VerticalLook));
 
 		g.setFont(font);
@@ -437,6 +442,14 @@ public class Screen extends JPanel {
 				LastCubeGenerateTime = System.currentTimeMillis();
 			}
 		}
+
+		if(ScreenShot){
+			p.take();
+			for (int i = 0; i < Cube.size(); i++) {
+				Log4Cube.write(Cube.get(i).dataArray());
+			}
+            ScreenShot = false;
+		}
 	}
 
 	//キューブが重複していないかチェック
@@ -537,6 +550,8 @@ public class Screen extends JPanel {
 					Tab = !Tab;
 					Ground.Debug =  !Ground.Debug;
 					break; //タブキャラセット
+				case KeyEvent.VK_F8: ScreenShot = true;
+
 			}
 
 		}
@@ -556,6 +571,7 @@ public class Screen extends JPanel {
 				case KeyEvent.VK_R : 	 	 Control[8] = false ; break;
 				case KeyEvent.VK_DELETE :Control[9] = false ; break;
 				case KeyEvent.VK_ENTER: Control[10] = false ; break;
+				case KeyEvent.VK_F8: ScreenShot = false;
 			}
 		}
 	}

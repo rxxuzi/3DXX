@@ -31,7 +31,7 @@ public class Object {
 		
 	}
 	
-	void drawPolygon(Graphics g){
+	public void drawPolygon(Graphics g){
 		
 		if(draw && visible){
 			g.setColor(new Color((int)(c.getRed() * lighting ), (int)(c.getGreen() * lighting), (int)(c.getBlue() * lighting)));

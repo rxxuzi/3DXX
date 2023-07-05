@@ -33,6 +33,7 @@ This is the 3D engine production project.
 ## システム
 
 + `Escape` : システムが終了します。
++ `F8` : スクリーンショットを撮影します
 
 # 技術関連
 
