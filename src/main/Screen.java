@@ -14,8 +14,10 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.*;
 import java.awt.Point;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Random;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -443,10 +445,28 @@ public class Screen extends JPanel {
 			}
 		}
 
+		//スクリーンショットと立方体の情報を記録する
 		if(ScreenShot){
+			String date =  new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+			String time =  new SimpleDateFormat("HH-mm-ss-SSS").format(new Date());
+			String name = "ScreenShot_" + date + "_" + time;
+			p.setFileName(name);
 			p.take();
-			Json json = new Json();
+			Json json = new Json(name);
+			json.write("{");
+			for (int i = 0; i < Cube.size(); i++) {
+				if(i != 0) {
+					json.write(",");
+				}
+				json.write("Cube" , i , 1);
+				json.write(Cube.get(i).dataArray()  , 2);
+				if (i == Cube.size() - 1) {
+					json.write("\n");
+				}
+			}
+			json.write("}\n");
 
+			System.gc();
 			ScreenShot = false;
 		}
 	}

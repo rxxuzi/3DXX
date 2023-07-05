@@ -5,9 +5,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Json {
-    String dirPath = "./pic/";
+    private static final String dirPath = "./screenshots/json/";
     String filename = "test.json";
     String filepath = dirPath + filename;
+    FileWriter fw = null;
 
     public Json() {
         File file = new File(filepath);
@@ -18,9 +19,21 @@ public class Json {
         }
     }
 
+    public Json(String filename){
+        this.filename = filename;
+        this.filepath = dirPath + filename + ".json";
+        File file = new File(filepath);
+        if (file.exists()) {
+            if(file.delete()){
+                System.out.println("file deleted");
+            }
+        }else{
+            System.out.println("making file !" + filepath);
+        }
+    }
+
     public void write(String[] data , int indent) {
-        File file = new File("./pic/test.json");
-        FileWriter fw = null;
+        File file = new File(filepath);
         try {
             fw = new FileWriter(file, true);
             fw.write("{\n");
@@ -36,8 +49,7 @@ public class Json {
 
 
     public void write(String data) {
-        File file = new File("./pic/test.json");
-        FileWriter fw = null;
+        File file = new File(filepath);
         try {
             fw = new FileWriter(file, true);
             fw.write(data);
@@ -48,8 +60,7 @@ public class Json {
     }
 
     public void write(String data, int count, int indent){
-        File file = new File("./pic/test.json");
-        FileWriter fw = null;
+        File file = new File(filepath);
         try {
             fw = new FileWriter(file, true);
             fw.write("\n" + indentString(indent) + "\"" + data +  count + " \" :");
