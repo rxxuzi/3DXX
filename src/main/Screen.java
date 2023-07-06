@@ -1,10 +1,10 @@
 package main;
 import com.sun.xml.internal.ws.developer.Serialization;
+import java.util.concurrent.atomic.AtomicBoolean;
 import jdk.jfr.BooleanFlag;
 import shot.Json;
 import shot.Picture;
 import vector.Vector;
-
 import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Robot;
@@ -21,7 +21,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Random;
 import java.awt.image.BufferedImage;
-import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JPanel;
 import vector.*;
 import write.Error;
@@ -291,6 +290,7 @@ public class Screen extends JPanel {
 				Cube.get(i).removeCube();
 				condition = "ALL DELETE";
 			}
+			System.gc();
 		}
 	}
 

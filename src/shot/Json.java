@@ -3,15 +3,17 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Json {
     private static final String dirPath = "./screenshots/json/";
     String filename = "test.json";
     String filepath = dirPath + filename;
     FileWriter fw = null;
+    File file;
 
     public Json() {
-        File file = new File(filepath);
+        file = new File(filepath);
         if (file.exists()) {
             if(file.delete()){
                 System.out.println("file deleted");
@@ -22,28 +24,27 @@ public class Json {
         if (!dir.exists()) {
             dir.mkdirs();
         }
-
     }
 
     public Json(String filename){
         this.filename = filename;
         this.filepath = dirPath + filename + ".json";
+
+        file = new File(filepath);
+        if (file.exists()) {
+            if(file.delete()){
+                System.out.println("file deleted : " + filepath);
+            }
+        }
         //make directory
         File dir = new File(dirPath);
         if (!dir.exists()) {
             dir.mkdirs();
         }
 
-        File file = new File(filepath);
-        if (file.exists()) {
-            if(file.delete()){
-                System.out.println("file deleted : " + filepath);
-            }
-        }
     }
 
     public void write(String[] data , int indent) {
-        File file = new File(filepath);
         try {
             fw = new FileWriter(file, true);
             fw.write("{\n");
@@ -59,7 +60,6 @@ public class Json {
 
 
     public void write(String data) {
-        File file = new File(filepath);
         try {
             fw = new FileWriter(file, true);
             fw.write(data);
@@ -70,13 +70,24 @@ public class Json {
     }
 
     public void write(String data, int count, int indent){
-        File file = new File(filepath);
         try {
             fw = new FileWriter(file, true);
             fw.write("\n" + indentString(indent) + "\"" + data +  count + " \" :");
             fw.close();
         }catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void write(ArrayList<Class> E){
+        try {
+            fw = new FileWriter(file, true);
+            for(int i = 0; i < E.size(); i++){
+                fw.write(E.get(i).toString());
+            }
+            fw.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

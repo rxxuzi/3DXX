@@ -295,14 +295,18 @@ public class Cube {
 
 	public String[] dataArray(){
 		String[] data = new String[6];
-
 		data[0] = "\"x \" : " + x  +", \"y \" : " + y  +", \"z \" : " + z  +",\n";
 		data[1] = "\"dx \": " + dx +", \"dy \": " + dy +", \"dz \": " + dz +",\n";
 		data[2] = "\"rotation \" : " + rotation +",\n";
 		data[3] = "\"isDisplay \" : \"" + isDisplay + "\""+",\n";
 		data[4] = "\"move  \" : " + "\"" + move + "\""+",\n";
 		data[5] = "\"Color \" : [" + this.color.getRed() + ", " + this.color.getGreen() + ", " + this.color.getBlue() + "]";
-
         return data;
+	}
+
+	@Override
+	public String toString() {
+		return "x : " + x + ", y : " + y + ", z : " + z +
+				", dx : " + dx + ", dy : " + dy + ", dz : " + dz + ", rotation : " + rotation + ", isDisplay : " + isDisplay + ", move : " + move + "\n";
 	}
 }
