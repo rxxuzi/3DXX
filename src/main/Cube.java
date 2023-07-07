@@ -307,6 +307,7 @@ public class Cube {
 	@Override
 	public String toString() {
 		return "x : " + x + ", y : " + y + ", z : " + z +
-				", dx : " + dx + ", dy : " + dy + ", dz : " + dz + ", rotation : " + rotation + ", isDisplay : " + isDisplay + ", move : " + move + "\n";
+				", dx : " + dx + ", dy : " + dy + ", dz : " + dz +
+				", move : " + move + "\n";
 	}
 }

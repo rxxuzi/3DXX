@@ -2,49 +2,49 @@ package write;
 
 import java.awt.*;
 import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Objects;
 
 public final class Saves {
     private int x;
     private int y;
     private int z;
 
-    private File file;
+    private static File file;
+    private static FileWriter fw;
 
-    public Saves(String str){
-        this.file = new File(str);
+    static final String dirPath = "./rsc/log/data/";
+    static final String fileType = ".log";
+    private String fileName;
+    private String filePath;
+
+    public Saves(){
+        fileName =  new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        filePath = dirPath + fileName + fileType;
+        this.file = new File(filePath);
+
     }
 
-    public void load(){
-        FileReader fr = null;
+    public static void write(String str){
         try {
-            fr = new FileReader(file);
-            BufferedReader br = new BufferedReader(fr);
-            String str = br.readLine();
-            String[] data = str.split(",");
-            x = Integer.parseInt(data[1]);
-            y = Integer.parseInt(data[2]);
-            z = Integer.parseInt(data[3]);
-            System.out.println(x + " " + y + " " + z);
-            fr.close();
-        }catch (IOException e){
-            e.printStackTrace();
-            Error.write(e);
+            fw = new FileWriter(file, true);
+            fw.write(str + "\n");
+            fw.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public void write(String data ,Color c){
-        FileWriter fw;
-        String nc = c.toString();
-        nc = nc.replaceAll("java.awt.Color" , "");
-        // remove "java.awt.Color" from the string
-        if(file != null){
-            try {
-                fw = new FileWriter(file , true);
-                fw.write(data +","+ nc + "\n");
-                fw.close();
-            }catch (IOException e){
-                e.printStackTrace();
-            }
+    public void write(String str , String str2){
+        try {
+            fw = new FileWriter(file, true);
+            fw.write(str + ": " + str2 + "\n");
+            fw.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
+
+
 }

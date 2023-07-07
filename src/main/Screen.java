@@ -213,7 +213,7 @@ public class Screen extends JPanel {
 			drawFPS = Checks/((System.currentTimeMillis() - LastFPSCheck)/1000.0);
 			LastFPSCheck = System.currentTimeMillis();
 			Checks = 0;
-//			System.gc();
+			System.gc();
 		}
 
 		if(timeSLU < 1000.0/MaxFPS){
@@ -311,15 +311,15 @@ public class Screen extends JPanel {
 		 (バブルソート)
 		*/
 		double d_tmp ;
-		int itmp;
+		int i_tmp;
 		for(int i = 0 ; i < k.length - 1 ; i++) {
 			for(int j = 0 ; j < k.length - 1 ; j++) {
 				if(k[j] < k[j + 1]) {
 					d_tmp = k[j];
-					itmp = NewOrder[j];
+					i_tmp = NewOrder[j];
 					NewOrder[j] = NewOrder[j + 1];
 					k[j] = k[j + 1];
-					NewOrder[j + 1] = itmp;
+					NewOrder[j + 1] = i_tmp;
 					k[j + 1] = d_tmp;
 				}
 			}
@@ -369,12 +369,14 @@ public class Screen extends JPanel {
 				yMove -= ViewVector.y * cameraSpeed;
 				zMove -= ViewVector.z * cameraSpeed;
 			}
+
 			//左に移動
 			if(Control[1]){
 				xMove += SideViewVector.x * cameraSpeed;
 				yMove += SideViewVector.y * cameraSpeed;
 				zMove += SideViewVector.z * cameraSpeed;
 			}
+
 			//右に移動
 			if(Control[3]){
 				xMove -= SideViewVector.x * cameraSpeed;
@@ -437,7 +439,6 @@ public class Screen extends JPanel {
 				if(CoordinateCheck(xyz)) {
 					Cube.add(new Cube(-rx/25d , ry/25d , rz/25d + 2, 1, 1, 1, new Color(rx , ry , rz) ));
 					condition = "CUBE GENERATED : (x,y,z) = " + rx /25 +"," + ry /25 + "," + rz /25;
-					saves.write(rx /25 +"," + ry /25 + "," + rz /25 , new Color(rx , ry , rz));
 				}
 				
 				counter1 ++ ;
@@ -503,7 +504,11 @@ public class Screen extends JPanel {
 		PolygonOver = null;
 		//探索
 		for(int i = NewOrder.length-1; i >= 0; i--) {
-			if(DPolygons.get(NewOrder[i]).DrawablePolygon.MouseOver() && DPolygons.get(NewOrder[i]).draw && DPolygons.get(NewOrder[i]).DrawablePolygon.visible){
+			if(
+					DPolygons.get(NewOrder[i]).DrawablePolygon.MouseOver()
+					&& DPolygons.get(NewOrder[i]).draw
+					&& DPolygons.get(NewOrder[i]).DrawablePolygon.visible
+			){
 				FocusPolygon = DPolygons.get(NewOrder[i]).DrawablePolygon;
 				PolygonOver = DPolygons.get(NewOrder[i]).DrawablePolygon;
 				
@@ -605,7 +610,7 @@ public class Screen extends JPanel {
 				r = new Robot();
 				r.mouseMove((int)Main.screenSize.getWidth()/2, (int)Main.screenSize.getHeight()/2);
 			} catch (AWTException e) {
-                Error.write(e);
+				Error.write(e);
 			}
 		}
 		

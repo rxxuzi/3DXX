@@ -3,12 +3,19 @@ package shot;
 import main.Main;
 import main.Screen;
 import write.Error;
+import write.Saves;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
+/**
+ * スクリーンショットを撮るclass
+ * main.Screenのstatic ArrayListを参照
+ *
+ * @author rxxuzi
+ */
 public class Picture {
     private static final int WIDTH = Main.screenSize.width;
     private static final int HEIGHT = Main.screenSize.height;
@@ -20,12 +27,17 @@ public class Picture {
         //make directory
         File dir = new File(dirPath);
         if (!dir.exists()) {
-            dir.mkdirs();
+
+            if(dir.mkdirs()){
+                Saves.write("make directory");
+            }
         }
     }
+
     public void setFileName(String fileName) {
         this.fileName = fileName  + "." + fileType;
     }
+
     /**
      * スクリーンショットを撮る
      */

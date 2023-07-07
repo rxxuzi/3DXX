@@ -18,7 +18,7 @@ import javax.swing.JFrame;
 public class Main {
 	public static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	static final long StartUpTime = System.currentTimeMillis();
-	public static Saves saves = new Saves("./rsc/log/data.log");
+	public static Saves saves = new Saves();
 	private static final boolean Debug = false;
 	public static Error error = new Error();
 	public static boolean displayGround = false;

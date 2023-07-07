@@ -5,7 +5,12 @@ import main.DPolygon;
 public class Plane {
 	Vector V1, V2, NV;
 	double[] P = new double[3];
-	
+
+	/**
+	 * プレーンベクトルを作成するコンストラクタ。
+	 * @param DP polygon
+	 */
+	@SuppressWarnings("unused")
 	public Plane(DPolygon DP){
 		P[0] = DP.x[0]; 
 		P[1] = DP.y[0]; 
@@ -22,7 +27,15 @@ public class Plane {
 		//V1とV2を直行させる
 		NV = V1.CrossProduct(V2);
 	}
-	
+
+	/**
+	 *
+	 * @param VE1 ベクトル1
+	 * @param VE2 ベクトル2
+	 * @param Z	  doubleのベクトルの値を保管する配列
+	 * NV : V1とV2のクロス積
+	 *
+	 */
 	public Plane(Vector VE1, Vector VE2, double[] Z){
 		//double[] Z = P
 		P = Z;
