@@ -3,6 +3,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Polygon;
 
+/**
+ * 3DObject のポリゴンを定義するクラス
+ * @since 1.1
+ * @author rxxuzi
+ * @see Polygon
+ */
 public class Object {
 	Polygon P;
 	Color c;

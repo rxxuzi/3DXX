@@ -56,8 +56,7 @@ public class Calculator {
 		if(ViewFrom[0]<ViewTo[0])
 			yRot = -yRot;
 
-			Vector V = new Vector(xRot, yRot, 0);
-		return V;
+		return new Vector(xRot, yRot, 0);
 	}
 	
 	public static void VectorInfo(){

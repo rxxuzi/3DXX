@@ -142,6 +142,6 @@ public class Pyramid {
 		for(int i = 0; i < Polys.length; i ++) {
 			Screen.DPolygons.remove(Polys[i]);			
 		}
-		Screen.Pyramid.remove(this);
+		Screen.Pyramids.remove(this);
 	}
 }

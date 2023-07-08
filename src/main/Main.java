@@ -8,11 +8,11 @@ import java.awt.Toolkit;
 import javax.swing.JFrame;
 
 /**
- * Project 3DXX
+ * Main class of the program.
  * @implSpec This class is used to initialize the program.
  * @author Rxxuzi
  * @version 4.3.4
- * @since 2023-07-02
+ * @since 1.0
  *
  */
 public class Main {

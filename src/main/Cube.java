@@ -45,6 +45,8 @@ public class Cube {
 	public static final double size = 2.0;
 
 	public boolean move = true;
+
+	private boolean canDelete = true;
 	
 	//座標と色情報からポリゴンを生成
 	public Cube(double x, double y, double z, double dx, double dy, double dz, Color color){
@@ -83,7 +85,7 @@ public class Cube {
 		}
 	}
 
-	//座標と色情報からポリゴンを生成
+	//座標と色情報からポリゴンを生成 + 固定するかどうか
 	public Cube(double x, double y, double z, double dx, double dy, double dz, Color color, boolean fixation){
 
 		Polys[0] = new DPolygon(new double[]{x, a, a, x}, new double[]{y, y, b, b},  new double[]{z, z, z, z}, color, false);
@@ -288,10 +290,12 @@ public class Cube {
 
 
 	void removeCube(){
-		for(int i = 0; i < 6; i ++) {
-			Screen.DPolygons.remove(Polys[i]);			
+		if (this.canDelete){
+			for(int i = 0; i < 6; i ++) {
+				Screen.DPolygons.remove(Polys[i]);
+			}
+			Screen.Cubes.remove(this);
 		}
-		Screen.Cubes.remove(this);
 	}
 
 

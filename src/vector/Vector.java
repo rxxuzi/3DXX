@@ -1,6 +1,11 @@
 package vector;
 
-
+/**
+ * ベクトル計算用クラス
+ * @since 1.0
+ * @author rxxuzi
+ *
+ */
 public class Vector {
 	public double x;
 	public double y;

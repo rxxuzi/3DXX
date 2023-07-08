@@ -7,6 +7,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Jsonファイルにキューブの情報を保存
+ * @since 4.3
+ */
 public class Json {
     private static final String dirPath = "./screenshots/json/";
     String filename = "test.json";

@@ -26,8 +26,14 @@ import javax.swing.JPanel;
 import vector.*;
 import write.Error;
 
-/*
-* Main.javaのFrameにパネルとしてaddするclass
+/**
+ * Main.javaのFrameにパネルとしてaddするclass
+ * @since 1.0
+ * @author rxxuzi
+ * @see javax.swing.JPanel
+ * @see Main
+ *
+*
 * */
 public class Screen extends JPanel {
 
@@ -39,16 +45,17 @@ public class Screen extends JPanel {
 	 * * 1.重力の追加(浮遊できなくなる)
 	 * * 2.カメラの最低z座標が2となる
 	 */
-	public static final AtomicBoolean firstPersonMode = new AtomicBoolean(false);
+	public static final AtomicBoolean FIRST_PERSON_MODE = new AtomicBoolean(false);
+	private static final AtomicBoolean SWITCH_CUBE_OPERATION = new AtomicBoolean(false);
+	private static final boolean DEBUG_MODE = false;
 	private static final double height = 4.0;
-	private static final boolean debugMode = false;
 	private static final double cameraSpeed = 0.002; //default => 0.25
 	private static final long moveInterval = 10; // default => 0
 	private static final double gravity = 0.001; // default => 0.001
 	public static ArrayList<DPolygon> DPolygons = new ArrayList<>();
 	public static ArrayList<Cube> Cubes = new ArrayList<>();
-	public static ArrayList<Pyramid> Pyramid = new ArrayList<>();
-    private static final int[] colorBox = new int[256 * 256 * 256];
+	public static ArrayList<Pyramid> Pyramids = new ArrayList<>();
+	private static final int[] colorBox = new int[256 * 256 * 256];
 	private static int counter1 = 0;
 	static Object PolygonOver = null ; //カーソル上のポリゴンの情報
 	static Cube CubeOver = null ; //カーソル上のキューブの情報
@@ -63,8 +70,8 @@ public class Screen extends JPanel {
 	public static double[] ViewFrom = FViewFrom.clone(); //カメラの座標
 	public static double[] ViewTo   = FViewTo.clone();	  //オブジェクトの座標
 	public static double zoom = 1000;
-    static double MinZoom = 100;
-    static double MaxZoom = 5000;
+	static double MinZoom = 100;
+	static double MaxZoom = 5000;
 	static double MouseX = 0 , MouseY = 0; //マウスの座標
 	static double MovementSpeed = 0.5; //マウスのスピード
 	double drawFPS = 0;
@@ -78,9 +85,9 @@ public class Screen extends JPanel {
 	public static int[] NewOrder; //配列DPolygonの描画する順番を保持する配列
 	static boolean OutLines = true;
 	boolean[] Control = new boolean[15];//キー入力の情報を格納する配列
-	boolean ScreenShot = false;
+	boolean ScreenShot = false;	//スクリーンショット用フラグ
 	private final static int FontSize = 15;
-	public static String condition = "NONE";
+	public static String condition = "NONE"; //状態を示す文字列
 	int Press = 10;
 	public static long t ; //時間
 	Robot r ;
@@ -90,7 +97,6 @@ public class Screen extends JPanel {
 	public boolean Details = false;
 	private boolean generate = false;
 	private String sss = "";
-	private static final AtomicBoolean SWITCH_CUBE_OPERATION = new AtomicBoolean(false);
 
 	public Screen(){
 		this.addKeyListener(new KeyTyped());
@@ -109,8 +115,10 @@ public class Screen extends JPanel {
 
 		new Ball(3,3,3,4,4,4,Color.MAGENTA);
 
+		Pyramids.add(new Pyramid(10,-5,2, 2,2,2,Color.MAGENTA));
+
 		new Ground();
-		new Floor();
+		new Floor(-20,-10,30,30);
 //        new TextToObject("./rsc/object/mario.txt");
 
 	}
@@ -188,11 +196,11 @@ public class Screen extends JPanel {
 		//描画更新のインターバル
 		SleepAndRefresh();
 
-		if(firstPersonMode.get()){
+		if(FIRST_PERSON_MODE.get()){
 			hitJudgment();
 		}
 
-		for(main.Cube c : Cubes){
+		for(Cube c : Cubes){
 			c.setDisplayCube();
 		}
 
@@ -503,8 +511,6 @@ public class Screen extends JPanel {
                 }
             }
 		}
-		
-		Cube gen;
 		if(cube != -1) {
 			switch (side) {
 				case 0 -> {
@@ -590,7 +596,7 @@ public class Screen extends JPanel {
 		ViewFrom[1] = y;
 		ViewFrom[2] = z;
 
-		if(firstPersonMode.get()){
+		if(FIRST_PERSON_MODE.get()){
 			ViewFrom[2] = height;
 		}else{
 			if(ViewFrom[2] < 0.0) ViewFrom[2] = 0.0;
@@ -766,9 +772,10 @@ public class Screen extends JPanel {
 
 			//左クリック
 			if(e.getButton() == MouseEvent.BUTTON3) {				
-				if(PolygonOver != null) PolygonOver.seeThrough = true;
 				if (SWITCH_CUBE_OPERATION.get()) {
 					generate = true;
+				}else{
+					if(PolygonOver != null) PolygonOver.seeThrough = true;
 				}
 			}
 		}
@@ -788,8 +795,8 @@ public class Screen extends JPanel {
 
 	@Override
 	public String toString() {
-		return " FPS MODE : " + firstPersonMode
-				+ "\n DEBUG MODE : " + debugMode
+		return " FPS MODE : " + FIRST_PERSON_MODE
+				+ "\n DEBUG MODE : " + DEBUG_MODE
 				+ "\n GRAVITY	 : " + gravity;
 	}
 }

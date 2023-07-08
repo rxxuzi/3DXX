@@ -8,6 +8,7 @@ import java.util.ArrayList;
 /*
 * rscフォルダ内のテキストを二次元配列に変換し、
 * オブジェクトとしてScreen.javaにあるList "Cube"にaddするclass
+* @since 2.1
 * */
 class TextToObject {
 	//文字列を格納するList

@@ -15,6 +15,7 @@ import java.io.File;
  * main.Screen‚Ìstatic ArrayList‚ğQÆ
  *
  * @author rxxuzi
+ * @since 4.2
  */
 public class Picture {
     private static final int WIDTH = Main.screenSize.width;
