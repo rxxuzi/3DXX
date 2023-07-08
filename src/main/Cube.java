@@ -289,7 +289,7 @@ public class Cube {
 		for(int i = 0; i < 6; i ++) {
 			Screen.DPolygons.remove(Polys[i]);			
 		}
-		Screen.Cube.remove(this);
+		Screen.Cubes.remove(this);
 	}
 
 

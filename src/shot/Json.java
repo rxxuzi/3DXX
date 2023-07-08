@@ -44,7 +44,7 @@ public class Json {
         File dir = new File(dirPath);
         if (!dir.exists()) {
             if(dir.mkdirs()){
-                Saves.write("made directory : " + dirPath);
+                Saves.write("made directory " , dirPath);
             }
         }
 

@@ -16,14 +16,11 @@ public final class Saves {
 
     static final String dirPath = "./rsc/log/data/";
     static final String fileType = ".log";
-    private String fileName;
-    private String filePath;
 
     public Saves(){
-        fileName =  new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-        filePath = dirPath + fileName + fileType;
-        this.file = new File(filePath);
-
+        String fileName = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        String filePath = dirPath + fileName + fileType;
+        file = new File(filePath);
     }
 
     public static void write(String str){
@@ -36,10 +33,22 @@ public final class Saves {
         }
     }
 
-    public void write(String str , String str2){
+    public static void write(String str , String str2){
         try {
             fw = new FileWriter(file, true);
             fw.write(str + ": " + str2 + "\n");
+            fw.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void write(String str , Color c){
+        String nc = c.toString();
+        nc = nc.replaceAll("java.awt.Color" , "");
+        try {
+            fw = new FileWriter(file, true);
+            fw.write(str + " Color: " + nc + "\n");
             fw.close();
         } catch (IOException e) {
             throw new RuntimeException(e);

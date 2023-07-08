@@ -1,5 +1,6 @@
 package main;
-import com.sun.xml.internal.ws.developer.Serialization;
+
+import java.io.Serial;
 import java.util.concurrent.atomic.AtomicBoolean;
 import jdk.jfr.BooleanFlag;
 import shot.Json;
@@ -25,13 +26,12 @@ import javax.swing.JPanel;
 import vector.*;
 import write.Error;
 
-import static main.Main.saves;
-
 /*
 * Main.javaのFrameにパネルとしてaddするclass
 * */
 public class Screen extends JPanel {
-    @Serialization
+
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -46,11 +46,12 @@ public class Screen extends JPanel {
 	private static final long moveInterval = 10; // default => 0
 	private static final double gravity = 0.001; // default => 0.001
 	public static ArrayList<DPolygon> DPolygons = new ArrayList<>();
-	public static ArrayList<Cube> Cube = new ArrayList<>();
+	public static ArrayList<Cube> Cubes = new ArrayList<>();
 	public static ArrayList<Pyramid> Pyramid = new ArrayList<>();
     private static final int[] colorBox = new int[256 * 256 * 256];
 	private static int counter1 = 0;
 	static Object PolygonOver = null ; //カーソル上のポリゴンの情報
+	static Cube CubeOver = null ; //カーソル上のキューブの情報
 	private static Object FocusPolygon = null;
 	private static final long deleteInterval = 200;
 	private static final long CubeGenerateInterval = 0; //default -> 100
@@ -87,6 +88,8 @@ public class Screen extends JPanel {
 	private final Picture p = new Picture();
 	@BooleanFlag
 	public boolean Details = false;
+	private boolean generate = false;
+	private String sss = "";
 
 	public Screen(){
 		this.addKeyListener(new KeyTyped());
@@ -97,17 +100,17 @@ public class Screen extends JPanel {
 		invisibleMouse();
 
 
-		Cube.add(new Cube(5,5,5,2,2,2,Color.green));
-		Cube.add(new Cube(5,3,6,2,2,2,Color.blue));
-		Cube.add(new Cube(5,2,7,2,2,2,Color.red));
+		Cubes.add(new Cube(5,5,5,2,2,2,Color.green));
+		Cubes.add(new Cube(5,3,6,2,2,2,Color.blue));
+		Cubes.add(new Cube(5,2,7,2,2,2,Color.red));
 
-
+		Cubes.add(new Cube(5,-6,6,2,2,2,new Color(175,10,151),true));
 
 		new Ball(3,3,3,4,4,4,Color.MAGENTA);
 
 		new Ground();
 		new Floor();
-        new TextToObject("./rsc/object/mario.txt");
+//        new TextToObject("./rsc/object/mario.txt");
 
 	}
 	/*描画に関するメソッド*/
@@ -163,7 +166,7 @@ public class Screen extends JPanel {
 			g.drawString("Horizontal Look(rad) : " + HorizontalLook , 10 , 105);
 			g.drawString("Vertical angle   	 : " + (int)VAngle + "°" , 10 ,120);
 			g.drawString("Number Of Polygons : " + DPolygons.size() , 10 ,135);
-			g.drawString("Number Of Cubes    : " + Cube.size() , 10 ,150);
+			g.drawString("Number Of Cubes    : " + Cubes.size() , 10 ,150);
 			try{
 				g.drawString("Focus Polys ID : " + FocusPolygon.toString() , 10 ,170);
 			}catch (NullPointerException e){
@@ -174,6 +177,7 @@ public class Screen extends JPanel {
 			g.drawString("CONDITION: " + condition , 10 ,190);
 			g.drawString(Press + "SIZE" , 10 , 220);
 			g.drawString(t +"s", 10,240);
+			g.drawString(sss , 10 , 260);
 		}
 
 		if(Control[10]){
@@ -187,7 +191,7 @@ public class Screen extends JPanel {
 			hitJudgment();
 		}
 
-		for(main.Cube c : Cube){
+		for(main.Cube c : Cubes){
 			c.setDisplayCube();
 		}
 
@@ -196,7 +200,7 @@ public class Screen extends JPanel {
 	private void snakeMove() {
 		double dx = 0.1;
 		double dy = 0.1;
-		for(Cube c : Cube){
+		for(Cube c : Cubes){
             if(c.move){
                 c.reflection(dx,dy,0.1);
                 c.updatePoly();
@@ -232,16 +236,16 @@ public class Screen extends JPanel {
 	private void hitJudgment() {
 		
 		if(
-				Cube.get(0).x < ViewFrom[0] && Cube.get(0).dx >ViewFrom[0] && Cube.get(0).y < ViewFrom[1] && Cube.get(0).dy > ViewFrom[1]
+				Cubes.get(0).x < ViewFrom[0] && Cubes.get(0).dx >ViewFrom[0] && Cubes.get(0).y < ViewFrom[1] && Cubes.get(0).dy > ViewFrom[1]
 		){
 			condition = "in the BOX";
-			if (Math.abs(Cube.get(0).x - ViewFrom[0]) > Math.abs(Cube.get(0).dx - ViewFrom[0])) {
+			if (Math.abs(Cubes.get(0).x - ViewFrom[0]) > Math.abs(Cubes.get(0).dx - ViewFrom[0])) {
 				ViewFrom[0] += 0.1;
 			}else{
 				ViewFrom[0] -= 0.1;
 			}
 
-			if (Math.abs(Cube.get(0).y - ViewFrom[1]) > Math.abs(Cube.get(0).dy - ViewFrom[1])) {
+			if (Math.abs(Cubes.get(0).y - ViewFrom[1]) > Math.abs(Cubes.get(0).dy - ViewFrom[1])) {
 				ViewFrom[1] += 0.1;
 			}else{
 				ViewFrom[1] -= 0.1;
@@ -268,12 +272,12 @@ public class Screen extends JPanel {
 	private void deleteCube() {
 		if(Control[7]) {
 			if(System.currentTimeMillis() - LastCubeDeleteTime >= deleteInterval) {
-				for(int i = 0 ; i < Cube.size() ; i ++) {
-					for(int j = 0 ; j < Cube.get(i).Polys.length ; j ++) {
-						if( Cube.get(i).Polys[j].DrawablePolygon.equals(FocusPolygon) ) {
+				for(int i = 0; i < Cubes.size() ; i ++) {
+					for(int j = 0; j < Cubes.get(i).Polys.length ; j ++) {
+						if( Cubes.get(i).Polys[j].DrawablePolygon.equals(FocusPolygon) ) {
 							//削除されたキューブの情報
-							String dCube = Cube.get(i).toString();
-							Cube.get(i).removeCube();
+							String dCube = Cubes.get(i).toString();
+							Cubes.get(i).removeCube();
 							LastCubeDeleteTime = System.currentTimeMillis();
 							condition = "CUBE DELETED : " + dCube;
 
@@ -286,8 +290,8 @@ public class Screen extends JPanel {
 
 		//全削除
 		if(Control[9]) {
-			for(int i = 0 ; i < Cube.size() ; i ++ ) {
-				Cube.get(i).removeCube();
+			for(int i = 0; i < Cubes.size() ; i ++ ) {
+				Cubes.get(i).removeCube();
 				condition = "ALL DELETE";
 			}
 			System.gc();
@@ -437,8 +441,9 @@ public class Screen extends JPanel {
 				colorBox[counter1] = xyz;
 
 				if(CoordinateCheck(xyz)) {
-					Cube.add(new Cube(-rx/25d , ry/25d , rz/25d + 2, 1, 1, 1, new Color(rx , ry , rz) ));
+					Cubes.add(new Cube(-rx/25d , ry/25d , rz/25d + 2, 1, 1, 1, new Color(rx , ry , rz) ));
 					condition = "CUBE GENERATED : (x,y,z) = " + rx /25 +"," + ry /25 + "," + rz /25;
+//					Saves.write(rx /25 +"," + ry /25 + "," + rz /25 , new Color(rx , ry , rz));
 				}
 				
 				counter1 ++ ;
@@ -455,13 +460,13 @@ public class Screen extends JPanel {
 			p.take();
 			Json json = new Json(name);
 			json.write("{");
-			for (int i = 0; i < Cube.size(); i++) {
+			for (int i = 0; i < Cubes.size(); i++) {
 				if(i != 0) {
 					json.write(",");
 				}
 				json.write("Cube" , i , 1);
-				json.write(Cube.get(i).dataArray()  , 2);
-				if (i == Cube.size() - 1) {
+				json.write(Cubes.get(i).dataArray()  , 2);
+				if (i == Cubes.size() - 1) {
 					json.write("\n");
 				}
 			}
@@ -469,6 +474,63 @@ public class Screen extends JPanel {
 
 			System.gc();
 			ScreenShot = false;
+		}
+
+		if(generate){
+			generateCube();
+            generate = false;
+		}
+	}
+
+	//キューブを生成する
+	private void generateCube(){
+		int cube = -1;
+		int side = -1;
+		double x = 0,y=0,z=0;
+		double d = 2;
+		for (int i = 0; i < Cubes.size(); i++) {
+			for(int j = 0; j < Cubes.get(i).Polys.length ; j ++) {
+                if(FocusPolygon == Cubes.get(i).Polys[j].DrawablePolygon) {
+					sss = Cubes.get(i).toString();
+					side = j;
+					cube = i;
+					x = Cubes.get(i).x;
+					y = Cubes.get(i).y;
+					z = Cubes.get(i).z;
+
+                    break;
+                }
+            }
+		}
+
+		if(cube != -1) {
+			switch (side) {
+				case 0 -> {
+					sss = "0 : Bottom"; //-z
+					Cubes.add(new Cube(x,y,z-d,d,d,d, new Color(255,75,75) , true));
+				}
+				case 1 -> {
+					sss = "1 : Top"; // +z
+                    Cubes.add(new Cube(x,y,z+d,d,d,d, new Color(75,255,255) , true));
+				}
+				case 2 -> {
+					sss = "2 : Right"; // +y
+					Cubes.add(new Cube(x,y+d,z,d,d,d, new Color(75,75,255) , true));
+				}
+				case 3 -> {
+					sss = "3 : Front"; //-y
+					Cubes.add(new Cube(x-d,y,z,d,d,d, new Color(255,255,75) , true));
+				}
+				case 4 -> {
+					sss = "4 : Left"; // -y
+					Cubes.add(new Cube(x,y-d,z,d,d,d, new Color(75,255,75) , true));
+				}
+				case 5 -> {
+					sss = "5 : Back "; // +x
+                    Cubes.add(new Cube(x+d,y,z,d,d,d, new Color(255,75,255) , true));
+				}
+				default -> sss = "-1 : Nothing";
+			}
 		}
 	}
 
@@ -515,6 +577,17 @@ public class Screen extends JPanel {
 				break;
 			}
 		}	
+	}
+
+	//マウスが乗っているキューブを特定
+	private void setCubeOver(){
+		for (int i = 0; i < Cubes.size(); i++) {
+//            if(Cube.get(i).MouseOver() && Cube.get(i).visible){
+//                CubeOver = Cube.get(i);
+//                break;
+//            }
+        }
+
 	}
 
 	private void MouseMovement(double NewX, double NewY){		
@@ -575,6 +648,7 @@ public class Screen extends JPanel {
 					Ground.Debug =  !Ground.Debug;
 					break; //タブキャラセット
 				case KeyEvent.VK_P: ScreenShot = true;
+				case KeyEvent.VK_K: generate = true;
 
 			}
 

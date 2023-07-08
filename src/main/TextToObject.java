@@ -55,13 +55,13 @@ class TextToObject {
 				//‚»‚ê‚¼‚ê‚É‘Î‰‚µ‚½F‚É‚µ‚ÄCube‚ğì¬
 				switch (x[i][j]) {
 				case 1:
-					Screen.Cube.add(new Cube(j, -10, row - i, 1, 1, 1, new Color(255, 0, 0), true));
+					Screen.Cubes.add(new Cube(j, -10, row - i, 1, 1, 1, new Color(255, 0, 0), true));
 					break;
 				case 2:
-					Screen.Cube.add(new Cube(j, -10, row - i, 1, 1, 1, new Color(98, 86, 26), true));
+					Screen.Cubes.add(new Cube(j, -10, row - i, 1, 1, 1, new Color(98, 86, 26), true));
 					break;
 				case 3:
-					Screen.Cube.add(new Cube(j, -10, row - i, 1, 1, 1, new Color(237, 148, 102), true));
+					Screen.Cubes.add(new Cube(j, -10, row - i, 1, 1, 1, new Color(237, 148, 102), true));
 					break;
 				}
 			}
