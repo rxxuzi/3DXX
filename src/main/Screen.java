@@ -90,6 +90,7 @@ public class Screen extends JPanel {
 	public boolean Details = false;
 	private boolean generate = false;
 	private String sss = "";
+	private static final AtomicBoolean SWITCH_CUBE_OPERATION = new AtomicBoolean(false);
 
 	public Screen(){
 		this.addKeyListener(new KeyTyped());
@@ -484,10 +485,11 @@ public class Screen extends JPanel {
 
 	//キューブを生成する
 	private void generateCube(){
-		int cube = -1;
+		int cube = -1; //作成対象となるキューブが見つかっていない場合、-1となる
 		int side = -1;
 		double x = 0,y=0,z=0;
-		double d = 2;
+		double d = Cube.size;
+		//ポリゴンの特定
 		for (int i = 0; i < Cubes.size(); i++) {
 			for(int j = 0; j < Cubes.get(i).Polys.length ; j ++) {
                 if(FocusPolygon == Cubes.get(i).Polys[j].DrawablePolygon) {
@@ -497,42 +499,80 @@ public class Screen extends JPanel {
 					x = Cubes.get(i).x;
 					y = Cubes.get(i).y;
 					z = Cubes.get(i).z;
-
                     break;
                 }
             }
 		}
-
+		
+		Cube gen;
 		if(cube != -1) {
 			switch (side) {
 				case 0 -> {
 					sss = "0 : Bottom"; //-z
-					Cubes.add(new Cube(x,y,z-d,d,d,d, new Color(255,75,75) , true));
+					if(generateCube(x,y,z-d)) {
+						Cubes.add(new Cube(x,y,z-d,d,d,d, new Color(255,75,75) , true));
+					}
 				}
 				case 1 -> {
 					sss = "1 : Top"; // +z
-                    Cubes.add(new Cube(x,y,z+d,d,d,d, new Color(75,255,255) , true));
+					if(generateCube(x,y,z+d)) {
+						Cubes.add(new Cube(x,y,z+d,d,d,d, new Color(75,255,255) , true));
+					}
 				}
 				case 2 -> {
 					sss = "2 : Right"; // +y
-					Cubes.add(new Cube(x,y+d,z,d,d,d, new Color(75,75,255) , true));
+					if(generateCube(x,y+d,z)){
+						Cubes.add(new Cube(x,y+d,z,d,d,d, new Color(75,75,255) , true));
+					}
 				}
 				case 3 -> {
-					sss = "3 : Front"; //-y
-					Cubes.add(new Cube(x-d,y,z,d,d,d, new Color(255,255,75) , true));
+					sss = "3 : Front"; //-x
+					if(generateCube(x-d,y,z)) {
+						Cubes.add(new Cube(x-d,y,z,d,d,d, new Color(255,255,75) , true));
+					}
 				}
 				case 4 -> {
 					sss = "4 : Left"; // -y
-					Cubes.add(new Cube(x,y-d,z,d,d,d, new Color(75,255,75) , true));
+					if(generateCube(x,y-d,z)) {
+						Cubes.add(new Cube(x,y-d,z,d,d,d, new Color(75,255,75) , true));
+					}
 				}
 				case 5 -> {
 					sss = "5 : Back "; // +x
-                    Cubes.add(new Cube(x+d,y,z,d,d,d, new Color(255,75,255) , true));
+					if(generateCube(x+d,y,z)) {
+						Cubes.add(new Cube(x+d,y,z,d,d,d, new Color(255,75,255) , true));
+					}
 				}
 				default -> sss = "-1 : Nothing";
 			}
+
+			/*//重複しているキューブを消す
+			for (int i = 0; i < Cubes.size(); i++) {
+				if (Cubes.get(i).x == Cubes.get(cube).x) {
+					if (Cubes.get(i).y == Cubes.get(cube).y) {
+						if (Cubes.get(i).z == Cubes.get(cube).z) {
+							Cubes.get(i).removeCube();
+						}
+					
+				}
+			}*/
 		}
 	}
+
+	private boolean generateCube(double x, double y, double z){
+		boolean canGenerate = true;
+		for (int i = 0; i < Cubes.size(); i++) {
+			if (Cubes.get(i).x == x) {
+				if (Cubes.get(i).y == y) {
+					if (Cubes.get(i).z == z) {
+						canGenerate = false;
+					}
+				}
+			}
+		}
+		return canGenerate;
+	}
+
 
 	//キューブが重複していないかチェック
 	private boolean CoordinateCheck(Integer xyz) {
@@ -579,16 +619,7 @@ public class Screen extends JPanel {
 		}	
 	}
 
-	//マウスが乗っているキューブを特定
-	private void setCubeOver(){
-		for (int i = 0; i < Cubes.size(); i++) {
-//            if(Cube.get(i).MouseOver() && Cube.get(i).visible){
-//                CubeOver = Cube.get(i);
-//                break;
-//            }
-        }
 
-	}
 
 	private void MouseMovement(double NewX, double NewY){		
 		//マウスがy軸(スクリーンの中央)からどれだけはなれたか計測
@@ -656,18 +687,21 @@ public class Screen extends JPanel {
 		
 		//キーを離した時にfalse
 		public void keyReleased(KeyEvent e) {
-			
-			switch(e.getKeyCode()) {
-				case KeyEvent.VK_W : 	 Control[0] = false ; break;
-				case KeyEvent.VK_A : 	 Control[1] = false ; break;
-				case KeyEvent.VK_S : 	 Control[2] = false ; break;
-				case KeyEvent.VK_D :	 Control[3] = false ; break;
-				case KeyEvent.VK_X : 	 Control[4] = false ; break;
-				case KeyEvent.VK_SPACE:	 Control[5] = false ; condition = "NONE"; break;
-				case KeyEvent.VK_SHIFT:	 Control[6] = false ; break;
-				case KeyEvent.VK_BACK_SPACE: Control[7] = false ; break;
-				case KeyEvent.VK_R : 	 	 Control[8] = false ; break;
-				case KeyEvent.VK_DELETE :Control[9] = false ; break;
+
+			switch (e.getKeyCode()) {
+				case KeyEvent.VK_W -> Control[0] = false;
+				case KeyEvent.VK_A -> Control[1] = false;
+				case KeyEvent.VK_S -> Control[2] = false;
+				case KeyEvent.VK_D -> Control[3] = false;
+				case KeyEvent.VK_X -> Control[4] = false;
+				case KeyEvent.VK_SPACE -> {
+					Control[5] = false;
+					condition = "NONE";
+				}
+				case KeyEvent.VK_SHIFT -> Control[6] = false;
+				case KeyEvent.VK_BACK_SPACE -> Control[7] = false;
+				case KeyEvent.VK_R -> Control[8] = false;
+				case KeyEvent.VK_DELETE -> Control[9] = false;
 			}
 		}
 	}
@@ -705,6 +739,13 @@ public class Screen extends JPanel {
 		}
 		
 		public void mouseClicked(MouseEvent e) {
+			if(e.getButton() == MouseEvent.BUTTON1) {
+
+            }
+			if(e.getButton() == MouseEvent.BUTTON3) {
+
+			}
+
 		}
 
 		public void mouseEntered(MouseEvent e) {
@@ -717,12 +758,18 @@ public class Screen extends JPanel {
 		public void mousePressed(MouseEvent e) {
 			//右クリック
 			if(e.getButton() == MouseEvent.BUTTON1) {
-				if(PolygonOver != null) PolygonOver.seeThrough = false;				
+				if(PolygonOver != null) PolygonOver.seeThrough = false;
+				SWITCH_CUBE_OPERATION.set(!SWITCH_CUBE_OPERATION.get());
+				if(SWITCH_CUBE_OPERATION.get()) condition = "Switch Cube Operation ON";
+				else condition = "Switch Cube Operation OFF";
 			}
 
 			//左クリック
 			if(e.getButton() == MouseEvent.BUTTON3) {				
 				if(PolygonOver != null) PolygonOver.seeThrough = true;
+				if (SWITCH_CUBE_OPERATION.get()) {
+					generate = true;
+				}
 			}
 		}
 

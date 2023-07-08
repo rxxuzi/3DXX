@@ -42,11 +42,13 @@ public class Cube {
 	public static final double maxY = 30d;
 	public static final double maxZ = 30d;
 
+	public static final double size = 2.0;
+
 	public boolean move = true;
 	
 	//À•W‚ÆFî•ñ‚©‚çƒ|ƒŠƒSƒ“‚ğ¶¬
 	public Cube(double x, double y, double z, double dx, double dy, double dz, Color color){
-		
+
 		Polys[0] = new DPolygon(new double[]{x, a, a, x}, new double[]{y, y, b, b},  new double[]{z, z, z, z}, color, false);
 		Polys[1] = new DPolygon(new double[]{x, a, a, x}, new double[]{y, y, b, b},  new double[]{c, c, c, c}, color, false);
 		Polys[2] = new DPolygon(new double[]{x, x, x, x}, new double[]{y, y, b, b},  new double[]{z, c, c, z}, color, false);
