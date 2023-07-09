@@ -6,7 +6,7 @@ package vector;
  * @author rxxuzi
  *
  */
-public class Vector {
+public final class Vector {
 	public double x;
 	public double y;
 	public double z;

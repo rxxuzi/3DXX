@@ -1,6 +1,7 @@
 package write;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public class Clean {
     public static void main(String[] args) {
@@ -16,4 +17,9 @@ public class Clean {
         }
 
     }
+
+    public static void main(ArrayList<String> args) {
+
+    }
 }
+

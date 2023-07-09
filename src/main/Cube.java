@@ -123,7 +123,47 @@ public class Cube {
 
 		this.move = !fixation;
 	}
-	
+
+	//座標と色情報からポリゴンを生成 + 固定するかどうか
+	public Cube(double x, double y, double z, double dx, double dy, double dz, Color color, boolean fixation ,boolean delete){
+
+		Polys[0] = new DPolygon(new double[]{x, a, a, x}, new double[]{y, y, b, b},  new double[]{z, z, z, z}, color, false);
+		Polys[1] = new DPolygon(new double[]{x, a, a, x}, new double[]{y, y, b, b},  new double[]{c, c, c, c}, color, false);
+		Polys[2] = new DPolygon(new double[]{x, x, x, x}, new double[]{y, y, b, b},  new double[]{z, c, c, z}, color, false);
+		Polys[3] = new DPolygon(new double[]{a, a, a, a}, new double[]{y, y, b, b},  new double[]{z, c, c, z}, color, false);
+		Polys[4] = new DPolygon(new double[]{x, x, a, a}, new double[]{y, y, y, y},  new double[]{z, c, c, z}, color, false);
+		Polys[5] = new DPolygon(new double[]{x, x, a, a}, new double[]{b, b, b, b},  new double[]{z, c, c, z}, color, false);
+
+		//Screen.javaのDPolygons<List>に転送
+		Screen.DPolygons.add(Polys[0]);
+		Screen.DPolygons.add(Polys[1]);
+		Screen.DPolygons.add(Polys[2]);
+		Screen.DPolygons.add(Polys[3]);
+		Screen.DPolygons.add(Polys[4]);
+		Screen.DPolygons.add(Polys[5]);
+
+		//インスタンス変数に代入
+		this.color = color;
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.dx = dx;
+		this.dy = dy;
+		this.dz = dz;
+
+		//角度情報を取得
+		setRotAdd();
+
+		setDisplayCube();
+
+		if(isDisplay){
+			updatePoly();
+		}
+
+		this.move = !fixation;
+		this.canDelete = delete;
+	}
+
 	public void setRotAdd(){
 		
 		angle = new double[4];
@@ -136,10 +176,19 @@ public class Cube {
 			if(xdif < 0) {
 				angle[i] += Math.PI;				
 			}
-			switch(i) {
-			case 0 : xdif =    dx/2 + e; ydif = - dy/2 + e; break;
-			case 1 : xdif =    dx/2 + e; ydif =   dy/2 + e; break;
-			case 2 : xdif =  - dx/2 + e; ydif =   dy/2 + e; break;
+			switch (i) {
+				case 0 -> {
+					xdif =  dx / 2 + e;
+					ydif = -dy / 2 + e;
+				}
+				case 1 -> {
+					xdif =  dx / 2 + e;
+					ydif =  dy / 2 + e;
+				}
+				case 2 -> {
+					xdif = -dx / 2 + e;
+					ydif =  dy / 2 + e;
+				}
 			}
 			
 			RotAdd[i] = angle[i] + 0.25 * Math.PI;
@@ -152,11 +201,7 @@ public class Cube {
 		double lengthY = Math.abs(Screen.ViewFrom[1] - y);
 		double lengthZ = Math.abs(Screen.ViewFrom[2] - z);
 
-		if( (lengthX + lengthY + lengthZ)/3 < maxDis){
-			this.isDisplay = true;
-		}else {
-			this.isDisplay = false;
-		}
+		this.isDisplay = (lengthX + lengthY + lengthZ) / 3 < maxDis;
 	}
 	
 	@SuppressWarnings("unused")
@@ -309,11 +354,8 @@ public class Cube {
 		data[5] = "\"Color \" : [" + this.color.getRed() + ", " + this.color.getGreen() + ", " + this.color.getBlue() + "]";
         return data;
 	}
-
-	@Override
-	public String toString() {
-		return "x : " + x + ", y : " + y + ", z : " + z +
-				", dx : " + dx + ", dy : " + dy + ", dz : " + dz +
-				", move : " + move + "\n";
+	
+	public void setCanDelete(boolean canDelete) {
+		this.canDelete = canDelete;
 	}
 }

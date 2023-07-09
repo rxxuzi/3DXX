@@ -27,43 +27,6 @@ abstract public class Polyhedron {
 	//カメラと離れられる最大距離
 	public static final double maxDis = 100d;
 
-	//座標と色情報からポリゴンを生成
-//	public Polyhedron(double x, double y, double z, double dx, double dy, double dz, Color color){
-//
-//		Polys[0] = new DPolygon(new double[]{x, a, a, x}, new double[]{y, y, b, b},  new double[]{z, z, z, z}, color, false);
-//		Polys[1] = new DPolygon(new double[]{x, a, a, x}, new double[]{y, y, b, b},  new double[]{c, c, c, c}, color, false);
-//		Polys[2] = new DPolygon(new double[]{x, x, x, x}, new double[]{y, y, b, b},  new double[]{z, c, c, z}, color, false);
-//		Polys[3] = new DPolygon(new double[]{a, a, a, a}, new double[]{y, y, b, b},  new double[]{z, c, c, z}, color, false);
-//		Polys[4] = new DPolygon(new double[]{x, x, a, a}, new double[]{y, y, y, y},  new double[]{z, c, c, z}, color, false);
-//		Polys[5] = new DPolygon(new double[]{x, x, a, a}, new double[]{b, b, b, b},  new double[]{z, c, c, z}, color, false);
-//
-//		//Screen.javaのDPolygons<List>に転送
-//		Screen.DPolygons.add(Polys[0]);
-//		Screen.DPolygons.add(Polys[1]);
-//		Screen.DPolygons.add(Polys[2]);
-//		Screen.DPolygons.add(Polys[3]);
-//		Screen.DPolygons.add(Polys[4]);
-//		Screen.DPolygons.add(Polys[5]);
-//
-//		//インスタンス変数に代入
-//		this.color = color;
-//		this.x = x;
-//		this.y = y;
-//		this.z = z;
-//		this.dx = dx;
-//		this.dy = dy;
-//		this.dz = dz;
-//
-//		//角度情報を取得
-//		setRotAdd();
-//
-//		setDisplayCube();
-//
-//		if(isDisplay){
-//			updatePoly();
-//		}
-//	}
-	
 	public void setRotAdd(){
 		
 		angle = new double[4];

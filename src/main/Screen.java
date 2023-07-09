@@ -3,9 +3,7 @@ package main;
 import java.io.Serial;
 import java.util.concurrent.atomic.AtomicBoolean;
 import jdk.jfr.BooleanFlag;
-import shot.Json;
-import shot.Picture;
-import vector.Vector;
+import java.awt.event.*;
 import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Robot;
@@ -14,7 +12,6 @@ import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Font;
 import java.awt.Toolkit;
-import java.awt.event.*;
 import java.awt.Point;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,9 +19,12 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Random;
 import java.awt.image.BufferedImage;
+import java.util.stream.IntStream;
 import javax.swing.JPanel;
 import vector.*;
 import write.Error;
+import shot.Json;
+import shot.Picture;
 
 /**
  * Main.javaのFrameにパネルとしてaddするclass
@@ -35,36 +35,50 @@ import write.Error;
  *
 *
 * */
-public class Screen extends JPanel {
+public final class Screen extends JPanel {
 
 	@Serial
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * fpsModeをTrueにすると以下のことが起こります
-	 * * 1.重力の追加(浮遊できなくなる)
+	 * FIRST_PERSON_MODE :
+	 * true :
+	 * 1.重力の追加(浮遊できなくなる)
 	 * * 2.カメラの最低z座標が2となる
 	 */
 	public static final AtomicBoolean FIRST_PERSON_MODE = new AtomicBoolean(false);
+	/**
+	 * SWITCH_CUBE_OPERATION :
+	 * true : 右クリックするとブロックを生成する
+	 * false: ポリゴンを表示/非表示にする
+	 */
 	private static final AtomicBoolean SWITCH_CUBE_OPERATION = new AtomicBoolean(false);
+	/**
+	 * スクリーンショット用フラグ
+	 */
+	private static final AtomicBoolean SCREEN_SHOT = new AtomicBoolean(false);
+	/**
+	 * キューブを作成するかのフラグ
+	 */
+	private final AtomicBoolean GENERATE = new AtomicBoolean(false);
+
 	private static final boolean DEBUG_MODE = false;
 	private static final double height = 4.0;
 	private static final double cameraSpeed = 0.002; //default => 0.25
 	private static final long moveInterval = 10; // default => 0
 	private static final double gravity = 0.001; // default => 0.001
-	public static ArrayList<DPolygon> DPolygons = new ArrayList<>();
 	public static ArrayList<Cube> Cubes = new ArrayList<>();
+	public static ArrayList<DPolygon> DPolygons = new ArrayList<>();
 	public static ArrayList<Pyramid> Pyramids = new ArrayList<>();
 	private static final int[] colorBox = new int[256 * 256 * 256];
 	private static int counter1 = 0;
-	static Object PolygonOver = null ; //カーソル上のポリゴンの情報
-	static Cube CubeOver = null ; //カーソル上のキューブの情報
+	public static Object PolygonOver = null ; //カーソル上のポリゴンの情報
 	private static Object FocusPolygon = null;
 	private static final long deleteInterval = 200;
 	private static final long CubeGenerateInterval = 0; //default -> 100
-	private static long LastMoveTime = 0;
-	private static long LastCubeDeleteTime = 0;
-	private static long LastCubeGenerateTime = 0 ;
+	private long LastMoveTime = 0;
+	private long LastCubeDeleteTime = 0;
+	private long LastCubeGenerateTime = 0 ;
 	static final double[] FViewFrom = { -2 , -2 , 10 };
 	static final double[] FViewTo = {  -2 , 0 ,  5 };
 	public static double[] ViewFrom = FViewFrom.clone(); //カメラの座標
@@ -73,20 +87,15 @@ public class Screen extends JPanel {
 	static double MinZoom = 100;
 	static double MaxZoom = 5000;
 	static double MouseX = 0 , MouseY = 0; //マウスの座標
-	static double MovementSpeed = 0.5; //マウスのスピード
-	double drawFPS = 0;
-	double MaxFPS = 2000;
-	double LastFPSCheck = 0 , Checks = 0 , LastRefresh = 0;
+	private double drawFPS = 0;
+	private double LastFPSCheck = 0 , Checks = 0 , LastRefresh = 0; //FPS関連
 	private double VerticalLook = -0.9; //0.99 ~ -0.99まで、正の値の時は上向き。負の値の時は下向き
 	private double HorizontalLook = 0; // 任意の数値をとり、ラジアン単位で一周する
 	double VerticalRotationSpeed = 1000; //垂直回転の速さ
 	double HorizontalRotationSpeed = 500; //水平回転の速さ
-	static final double aimSight = 4;	// センタークロスの大きさ
 	public static int[] NewOrder; //配列DPolygonの描画する順番を保持する配列
-	static boolean OutLines = true;
+	static boolean OutLines = true; // ポリゴンのアウトラインの描画を決めるフラグ
 	boolean[] Control = new boolean[15];//キー入力の情報を格納する配列
-	boolean ScreenShot = false;	//スクリーンショット用フラグ
-	private final static int FontSize = 15;
 	public static String condition = "NONE"; //状態を示す文字列
 	int Press = 10;
 	public static long t ; //時間
@@ -95,32 +104,63 @@ public class Screen extends JPanel {
 	private final Picture p = new Picture();
 	@BooleanFlag
 	public boolean Details = false;
-	private boolean generate = false;
 	private String sss = "";
 
 	public Screen(){
+		//Key and Mouse Listener
 		this.addKeyListener(new KeyTyped());
-		setFocusable(true);
 		this.addMouseListener(new AboutMouse());
 		this.addMouseMotionListener(new AboutMouse());
 		this.addMouseWheelListener(new AboutMouse());
+
+		setFocusable(true);
+
 		invisibleMouse();
 
+		Cubes.add(new Cube(5,-6,6,2,2,2,new Color(200,200,200),true , false));
 
-		Cubes.add(new Cube(5,5,5,2,2,2,Color.green));
-		Cubes.add(new Cube(5,3,6,2,2,2,Color.blue));
-		Cubes.add(new Cube(5,2,7,2,2,2,Color.red));
+		if(! Main.MINIMUM_MODE){
+			Cubes.add(new Cube(5,5,5,2,2,2,Color.green));
+			Cubes.add(new Cube(5,3,6,2,2,2,Color.blue));
+			Cubes.add(new Cube(5,2,7,2,2,2,Color.red));
+			Pyramids.add(new Pyramid(10,-5,2, 2,2,2,Color.MAGENTA));
 
-		Cubes.add(new Cube(5,-6,6,2,2,2,new Color(175,10,151),true));
+			new Ball(3,3,3,4,4,4,Color.MAGENTA);
+			new TextToObject("./rsc/object/mario.txt");
+			new Ground();
+			new Floor(-20,-10,30,30);
+		}
 
-		new Ball(3,3,3,4,4,4,Color.MAGENTA);
 
-		Pyramids.add(new Pyramid(10,-5,2, 2,2,2,Color.MAGENTA));
 
-		new Ground();
-		new Floor(-20,-10,30,30);
-//        new TextToObject("./rsc/object/mario.txt");
+	}
 
+	public Screen(boolean fps){
+		//Key and Mouse Listener
+		this.addKeyListener(new KeyTyped());
+		this.addMouseListener(new AboutMouse());
+		this.addMouseMotionListener(new AboutMouse());
+		this.addMouseWheelListener(new AboutMouse());
+
+		setFocusable(true);
+
+		invisibleMouse();
+
+		Cubes.add(new Cube(5,-6,6,2,2,2,new Color(200,200,200),true , false));
+
+		if(! Main.MINIMUM_MODE){
+			Cubes.add(new Cube(5,5,5,2,2,2,Color.green));
+			Cubes.add(new Cube(5,3,6,2,2,2,Color.blue));
+			Cubes.add(new Cube(5,2,7,2,2,2,Color.red));
+			Pyramids.add(new Pyramid(10,-5,2, 2,2,2,Color.MAGENTA));
+
+			new Ball(3,3,3,4,4,4,Color.MAGENTA);
+			new TextToObject("./rsc/object/mario.txt");
+			new Ground();
+			new Floor(-20,-10,30,30);
+		}
+
+		FIRST_PERSON_MODE.set(fps);
 	}
 	/*描画に関するメソッド*/
 
@@ -149,14 +189,15 @@ public class Screen extends JPanel {
 		setPolygonOver();
 
 		//setOrder関数で設定された順序でポリゴンを描画
-		for (int j : NewOrder) {
-			DPolygons.get(j).DrawablePolygon.drawPolygon(g);
-		}
+
+		IntStream.range(0, Screen.NewOrder.length).forEach(i -> DPolygons.get(Screen.NewOrder[i]).DrawablePolygon.drawPolygon(g));
 
 		//画面の中央にエイムをつける
 		drawMouseAim(g);
 
 		//フォントの設定
+		int FontSize = 15;
+
 		Font font = new Font(Font.DIALOG, Font.ITALIC,FontSize);
 		//角度の計算
 		double VAngle =  Math.toDegrees(Math.tan(VerticalLook));
@@ -176,6 +217,7 @@ public class Screen extends JPanel {
 			g.drawString("Vertical angle   	 : " + (int)VAngle + "°" , 10 ,120);
 			g.drawString("Number Of Polygons : " + DPolygons.size() , 10 ,135);
 			g.drawString("Number Of Cubes    : " + Cubes.size() , 10 ,150);
+
 			try{
 				g.drawString("Focus Polys ID : " + FocusPolygon.toString() , 10 ,170);
 			}catch (NullPointerException e){
@@ -229,9 +271,10 @@ public class Screen extends JPanel {
 			System.gc();
 		}
 
-		if(timeSLU < 1000.0/MaxFPS){
+		double maxFPS = 2000;
+		if(timeSLU < 1000.0/ maxFPS){
 			try {
-				Thread.sleep((long) (1000.0/MaxFPS - timeSLU));
+				Thread.sleep((long) (1000.0/ maxFPS - timeSLU));
 			} catch (InterruptedException e) {
                 Error.write(e);
 			}
@@ -339,7 +382,9 @@ public class Screen extends JPanel {
 		}
 	}
 
-	//マウスを非表示
+	/**
+	 * マウスを非表示にするメソッド
+	 */
 	private void invisibleMouse(){
 		 Toolkit toolkit = Toolkit.getDefaultToolkit();
 		 BufferedImage cursorImage = new BufferedImage(1, 1, BufferedImage.TRANSLUCENT);
@@ -347,9 +392,13 @@ public class Screen extends JPanel {
 		 setCursor(invisibleCursor);
 	}
 
-	//マウスエイムを描画
+	/**
+	 * マウスエイムを描画するメソッド
+	 */
 	private void drawMouseAim(Graphics g){
+		double aimSight = 4;	// センタークロスの大きさ
 		g.setColor(Color.black);
+
 		g.drawLine((int)(Main.screenSize.getWidth()/2 - aimSight), (int)(Main.screenSize.getHeight()/2), (int)(Main.screenSize.getWidth()/2 + aimSight), (int)(Main.screenSize.getHeight()/2));
 		g.drawLine((int)(Main.screenSize.getWidth()/2), (int)(Main.screenSize.getHeight()/2 - aimSight), (int)(Main.screenSize.getWidth()/2), (int)(Main.screenSize.getHeight()/2 + aimSight));
 	}
@@ -403,9 +452,11 @@ public class Screen extends JPanel {
 		
 		//移動するベクトル
 		Vector MoveVector = new Vector(xMove, yMove, zMove);
-		double fx = MoveVector.x * MovementSpeed;
-		double fy = MoveVector.y * MovementSpeed;
-		double fz = MoveVector.z * MovementSpeed;
+		//マウスのスピード
+		double movementSpeed = 0.5;
+		double fx = MoveVector.x * movementSpeed;
+		double fy = MoveVector.y * movementSpeed;
+		double fz = MoveVector.z * movementSpeed;
 		
 		MoveTo(ViewFrom[0] + fx, ViewFrom[1] + fy, ViewFrom[2] + fz);
 		
@@ -461,7 +512,7 @@ public class Screen extends JPanel {
 		}
 
 		//スクリーンショットと立方体の情報を記録する
-		if(ScreenShot){
+		if(SCREEN_SHOT.get()){
 			String date =  new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 			String time =  new SimpleDateFormat("HH-mm-ss-SSS").format(new Date());
 			String name = "ScreenShot_" + date + "_" + time;
@@ -482,12 +533,12 @@ public class Screen extends JPanel {
 			json.write("}\n");
 
 			System.gc();
-			ScreenShot = false;
+			SCREEN_SHOT.set(false);
 		}
 
-		if(generate){
+		if(GENERATE.get()){
 			generateCube();
-            generate = false;
+            GENERATE.set(false);
 		}
 	}
 
@@ -552,16 +603,7 @@ public class Screen extends JPanel {
 				default -> sss = "-1 : Nothing";
 			}
 
-			/*//重複しているキューブを消す
-			for (int i = 0; i < Cubes.size(); i++) {
-				if (Cubes.get(i).x == Cubes.get(cube).x) {
-					if (Cubes.get(i).y == Cubes.get(cube).y) {
-						if (Cubes.get(i).z == Cubes.get(cube).z) {
-							Cubes.get(i).removeCube();
-						}
-					
-				}
-			}*/
+			condition = "Generate Cube";
 		}
 	}
 
@@ -654,39 +696,51 @@ public class Screen extends JPanel {
 	
 	/*キー入力用class*/
 	class KeyTyped extends KeyAdapter{
-
-		public boolean Tab = false;
 		
 		//キーを押した時にtrue
 		public void keyPressed(KeyEvent e) {
-			
-			switch(e.getKeyCode()) {
-				case KeyEvent.VK_W : 	 Control[0] = true ; break; //前進
-				case KeyEvent.VK_A : 	 Control[1] = true ; break; //後退
-				case KeyEvent.VK_S : 	 Control[2] = true ; break; //左へ
-				case KeyEvent.VK_D :	 Control[3] = true ; break; //右へ
-				case KeyEvent.VK_X : 	 Control[4] = true ; break; //視点リセット
-				case KeyEvent.VK_SPACE:	 Control[5] = true ; break; //上へ
-				case KeyEvent.VK_SHIFT:	 Control[6] = true ; break; //下へ
-				case KeyEvent.VK_BACK_SPACE: Control[7] = true ; break; //下へ
-				case KeyEvent.VK_R : 	 Control[8] = true ; break; //キューブを生成
-				case KeyEvent.VK_DELETE :Control[9] = true ; break; //キューブを削除
-				case KeyEvent.VK_O 	:	OutLines = !OutLines; //ライン削除
-					if(OutLines) {
+
+			switch (e.getKeyCode()) {
+				//前進
+				case KeyEvent.VK_W -> Control[0] = true;
+				//後退
+				case KeyEvent.VK_A -> Control[1] = true;
+				//左へ
+				case KeyEvent.VK_S -> Control[2] = true;
+				//右へ
+				case KeyEvent.VK_D -> Control[3] = true;
+				//視点リセット
+				case KeyEvent.VK_X -> Control[4] = true;
+				//上へ
+				case KeyEvent.VK_SPACE -> Control[5] = true;
+				//下へ
+				case KeyEvent.VK_SHIFT -> Control[6] = true;
+				//下へ
+				case KeyEvent.VK_BACK_SPACE -> Control[7] = true;
+				//キューブを生成
+				case KeyEvent.VK_R -> Control[8] = true;
+				//キューブを削除
+				case KeyEvent.VK_DELETE -> Control[9] = true;
+				//詳細情報の表示/非表示
+				case KeyEvent.VK_ENTER -> Details = !Details;
+				case KeyEvent.VK_O -> {
+					OutLines = !OutLines; //ライン削除
+					if (OutLines) {
 						condition = "Show outer frame";
-					}else {
+					} else {
 						condition = "Hide outer frame";
 					}
-					break;
-				case KeyEvent.VK_ENTER : Details = !Details; break;
-				case KeyEvent.VK_ESCAPE : System.exit(0); break; //Escapeキーを押すと終了
-				case KeyEvent.VK_TAB:
-					Tab = !Tab;
-					Ground.Debug =  !Ground.Debug;
-					break; //タブキャラセット
-				case KeyEvent.VK_P: ScreenShot = true;
-				case KeyEvent.VK_K: generate = true;
+				}
+				//Escapeキーを押すと終了
+				case KeyEvent.VK_ESCAPE -> System.exit(0);
+				case KeyEvent.VK_P -> SCREEN_SHOT.set(true);
+				case KeyEvent.VK_K -> GENERATE.set(true);
 
+				case KeyEvent.VK_TAB -> {
+					//ポリゴンを表示を切り替える
+					if(PolygonOver != null) PolygonOver.seeThrough = !PolygonOver.seeThrough;
+					Ground.Debug = !Ground.Debug;
+				} //タブキャラセット
 			}
 
 		}
@@ -745,12 +799,6 @@ public class Screen extends JPanel {
 		}
 		
 		public void mouseClicked(MouseEvent e) {
-			if(e.getButton() == MouseEvent.BUTTON1) {
-
-            }
-			if(e.getButton() == MouseEvent.BUTTON3) {
-
-			}
 
 		}
 
@@ -762,27 +810,30 @@ public class Screen extends JPanel {
 		
 		//マウスのクリックをしたときの制御
 		public void mousePressed(MouseEvent e) {
-			//右クリック
+			//左クリック
 			if(e.getButton() == MouseEvent.BUTTON1) {
-				if(PolygonOver != null) PolygonOver.seeThrough = false;
-				SWITCH_CUBE_OPERATION.set(!SWITCH_CUBE_OPERATION.get());
-				if(SWITCH_CUBE_OPERATION.get()) condition = "Switch Cube Operation ON";
-				else condition = "Switch Cube Operation OFF";
+
+				if (SWITCH_CUBE_OPERATION.get()) {
+					GENERATE.set(true);
+				}else{
+					if(PolygonOver != null) PolygonOver.seeThrough = !PolygonOver.seeThrough;
+				}
 			}
 
-			//左クリック
-			if(e.getButton() == MouseEvent.BUTTON3) {				
-				if (SWITCH_CUBE_OPERATION.get()) {
-					generate = true;
-				}else{
-					if(PolygonOver != null) PolygonOver.seeThrough = true;
-				}
+			//右クリック
+			if(e.getButton() == MouseEvent.BUTTON3) {
+				//scoを反転
+				SWITCH_CUBE_OPERATION.set(!SWITCH_CUBE_OPERATION.get());
+
+				if(SWITCH_CUBE_OPERATION.get()) condition = "Switch Cube Operation ON";
+				else condition = "Switch Cube Operation OFF";
 			}
 		}
 
 		public void mouseReleased(MouseEvent e) {
 		}
 		public void mouseWheelMoved(MouseWheelEvent e) {
+
 			if(e.getUnitsToScroll()>0){
 				if(zoom > MinZoom) zoom -= 25 * e.getUnitsToScroll();
 				condition = "Zoom out";

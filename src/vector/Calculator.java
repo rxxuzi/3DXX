@@ -6,7 +6,7 @@ import main.Screen;
  * @author rxxuzi
  * DPolygon.class‚ÌŒvŽZ—pclass
  * */
-public class Calculator {
+public final class Calculator {
 	public static double t = 0;
 	static Vector RVector1, RVector2, ViewVector, RotationVector, DirectionVector, PlaneVector1, PlaneVector2;
 	static Plane P;

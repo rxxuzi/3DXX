@@ -2,7 +2,7 @@ package vector;
 
 import main.DPolygon;
 
-public class Plane {
+public final class Plane {
 	Vector V1, V2, NV;
 	double[] P = new double[3];
 

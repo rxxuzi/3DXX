@@ -54,7 +54,6 @@ public class Menu extends JPanel {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
         t += 0.02;
         repaint();
     }
