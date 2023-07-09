@@ -1,30 +1,23 @@
 package main;
 
-import java.io.Serial;
-import java.util.concurrent.atomic.AtomicBoolean;
 import jdk.jfr.BooleanFlag;
+import shot.Json;
+import shot.Picture;
+import vector.Calculator;
+import vector.Vector;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
-import java.awt.AWTException;
-import java.awt.Color;
-import java.awt.Robot;
-import java.awt.event.KeyEvent;
-import java.awt.Cursor;
-import java.awt.Graphics;
-import java.awt.Font;
-import java.awt.Toolkit;
-import java.awt.Point;
+import java.awt.image.BufferedImage;
+import java.io.Serial;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Random;
-import java.awt.image.BufferedImage;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.IntStream;
-import javax.swing.JPanel;
-import vector.*;
-import write.Error;
-import shot.Json;
-import shot.Picture;
 
 /**
  * Main.javaのFrameにパネルとしてaddするclass
@@ -61,7 +54,7 @@ public final class Screen extends JPanel {
 	 * キューブを作成するかのフラグ
 	 */
 	private final AtomicBoolean GENERATE = new AtomicBoolean(false);
-
+	private final AtomicBoolean DELETE = new AtomicBoolean(false);
 	private static final boolean DEBUG_MODE = false;
 	private static final double height = 4.0;
 	private static final double cameraSpeed = 0.002; //default => 0.25
@@ -103,7 +96,7 @@ public final class Screen extends JPanel {
 	Random random = new Random();
 	private final Picture p = new Picture();
 	@BooleanFlag
-	public boolean Details = false;
+	public boolean Details = true;
 	private String sss = "";
 
 	public Screen(){
@@ -119,7 +112,9 @@ public final class Screen extends JPanel {
 
 		Cubes.add(new Cube(5,-6,6,2,2,2,new Color(200,200,200),true , false));
 
-		if(! Main.MINIMUM_MODE){
+		if (Main.MINIMUM_MODE) {
+			this.setBackground(Color.BLACK);
+		} else {
 			Cubes.add(new Cube(5,5,5,2,2,2,Color.green));
 			Cubes.add(new Cube(5,3,6,2,2,2,Color.blue));
 			Cubes.add(new Cube(5,2,7,2,2,2,Color.red));
@@ -130,7 +125,6 @@ public final class Screen extends JPanel {
 			new Ground();
 			new Floor(-20,-10,30,30);
 		}
-
 
 
 	}
@@ -147,8 +141,11 @@ public final class Screen extends JPanel {
 		invisibleMouse();
 
 		Cubes.add(new Cube(5,-6,6,2,2,2,new Color(200,200,200),true , false));
+		Cubes.add(new Cube(5,6,2,2,2,2,new Color(200,200,200),true , false));
 
-		if(! Main.MINIMUM_MODE){
+		if (Main.MINIMUM_MODE) {
+			this.setBackground(Color.BLACK);
+		} else {
 			Cubes.add(new Cube(5,5,5,2,2,2,Color.green));
 			Cubes.add(new Cube(5,3,6,2,2,2,Color.blue));
 			Cubes.add(new Cube(5,2,7,2,2,2,Color.red));
@@ -165,6 +162,10 @@ public final class Screen extends JPanel {
 	/*描画に関するメソッド*/
 
 	public void paintComponent(Graphics g){
+
+		if(Main.MINIMUM_MODE){
+			g.setColor(Color.BLACK);
+		}
 		//描画リセット
 		g.clearRect(0, 0, (int)Main.screenSize.getWidth(), (int)Main.screenSize.getHeight());
 
@@ -196,6 +197,7 @@ public final class Screen extends JPanel {
 		drawMouseAim(g);
 
 		//フォントの設定
+		//フォントサイズを指定
 		int FontSize = 15;
 
 		Font font = new Font(Font.DIALOG, Font.ITALIC,FontSize);
@@ -204,6 +206,7 @@ public final class Screen extends JPanel {
 
 		g.setFont(font);
 
+		//動きを指定
 		snakeMove();
 
 		if(Details){
@@ -222,11 +225,14 @@ public final class Screen extends JPanel {
 				g.drawString("Focus Polys ID : " + FocusPolygon.toString() , 10 ,170);
 			}catch (NullPointerException e){
 				g.drawString("Focus Polys ID : " + "NULL" , 10 ,170);
-				Error.write(e);
 			}
 			g.setFont(new Font(Font.SANS_SERIF , Font.BOLD , 20));
 			g.drawString("CONDITION: " + condition , 10 ,190);
-			g.drawString(Press + "SIZE" , 10 , 220);
+			if(SWITCH_CUBE_OPERATION.get()){
+				g.drawString("GENERATE MODE" , 10 , 220);
+			}else{
+				g.drawString("DELETE MODE" , 10 ,220);
+			}
 			g.drawString(t +"s", 10,240);
 			g.drawString(sss , 10 , 260);
 		}
@@ -275,8 +281,7 @@ public final class Screen extends JPanel {
 		if(timeSLU < 1000.0/ maxFPS){
 			try {
 				Thread.sleep((long) (1000.0/ maxFPS - timeSLU));
-			} catch (InterruptedException e) {
-                Error.write(e);
+			} catch (InterruptedException ignored) {
 			}
 		}
 		LastRefresh = System.currentTimeMillis();
@@ -322,23 +327,26 @@ public final class Screen extends JPanel {
 	 */
 
 	private void deleteCube() {
-		if(Control[7]) {
+		if(Control[7] || DELETE.get()) {
 			if(System.currentTimeMillis() - LastCubeDeleteTime >= deleteInterval) {
 				for(int i = 0; i < Cubes.size() ; i ++) {
 					for(int j = 0; j < Cubes.get(i).Polys.length ; j ++) {
 						if( Cubes.get(i).Polys[j].DrawablePolygon.equals(FocusPolygon) ) {
-							//削除されたキューブの情報
-							String dCube = Cubes.get(i).toString();
-							Cubes.get(i).removeCube();
-							LastCubeDeleteTime = System.currentTimeMillis();
-							condition = "CUBE DELETED : " + dCube;
+							if(Cubes.get(i).getdelete()){
+								//削除されたキューブの情報
+								String dCube = Cubes.get(i).toString();
 
-							break;
+								Cubes.get(i).removeCube();
+								LastCubeDeleteTime = System.currentTimeMillis();
+								condition = "CUBE DELETED : " + dCube;
+								break;
+							}
 						}
 					}
 				}
 			}
 		}
+
 
 		//全削除
 		if(Control[9]) {
@@ -736,11 +744,16 @@ public final class Screen extends JPanel {
 				case KeyEvent.VK_P -> SCREEN_SHOT.set(true);
 				case KeyEvent.VK_K -> GENERATE.set(true);
 
-				case KeyEvent.VK_TAB -> {
-					//ポリゴンを表示を切り替える
-					if(PolygonOver != null) PolygonOver.seeThrough = !PolygonOver.seeThrough;
-					Ground.Debug = !Ground.Debug;
-				} //タブキャラセット
+				case KeyEvent.VK_SLASH -> {
+					//scoを反転
+					SWITCH_CUBE_OPERATION.set(!SWITCH_CUBE_OPERATION.get());
+					if(SWITCH_CUBE_OPERATION.get()) condition = "Switch Cube Operation : Generate";
+					else condition = "Switch Cube Operation : Delete";
+
+				}
+
+				case KeyEvent.VK_COMMA -> Control[10] = true;
+
 			}
 
 		}
@@ -762,6 +775,7 @@ public final class Screen extends JPanel {
 				case KeyEvent.VK_BACK_SPACE -> Control[7] = false;
 				case KeyEvent.VK_R -> Control[8] = false;
 				case KeyEvent.VK_DELETE -> Control[9] = false;
+				case KeyEvent.VK_COMMA -> Control[10] = false;
 			}
 		}
 	}
@@ -777,8 +791,8 @@ public final class Screen extends JPanel {
 			try {
 				r = new Robot();
 				r.mouseMove((int)Main.screenSize.getWidth()/2, (int)Main.screenSize.getHeight()/2);
-			} catch (AWTException e) {
-				Error.write(e);
+			} catch (AWTException ignored) {
+
 			}
 		}
 		
@@ -816,21 +830,22 @@ public final class Screen extends JPanel {
 				if (SWITCH_CUBE_OPERATION.get()) {
 					GENERATE.set(true);
 				}else{
-					if(PolygonOver != null) PolygonOver.seeThrough = !PolygonOver.seeThrough;
+					DELETE.set(true);
 				}
 			}
 
 			//右クリック
 			if(e.getButton() == MouseEvent.BUTTON3) {
-				//scoを反転
-				SWITCH_CUBE_OPERATION.set(!SWITCH_CUBE_OPERATION.get());
-
-				if(SWITCH_CUBE_OPERATION.get()) condition = "Switch Cube Operation ON";
-				else condition = "Switch Cube Operation OFF";
+				if(PolygonOver != null) {
+					PolygonOver.seeThrough = !PolygonOver.seeThrough;
+				}
 			}
 		}
 
 		public void mouseReleased(MouseEvent e) {
+			if(e.getButton() == MouseEvent.BUTTON1) {
+                DELETE.set(false);
+            }
 		}
 		public void mouseWheelMoved(MouseWheelEvent e) {
 

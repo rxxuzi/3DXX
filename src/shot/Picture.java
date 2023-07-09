@@ -2,7 +2,6 @@ package shot;
 
 import main.Main;
 import main.Screen;
-import write.Error;
 import write.Saves;
 
 import javax.imageio.ImageIO;
@@ -50,9 +49,7 @@ public final class Picture {
 
 
         //Stream API‚ðŽg—p‚µ‚½for•¶‚Ì•À—ñˆ—
-        IntStream.range(0, Screen.NewOrder.length).forEach(i -> {
-            Screen.DPolygons.get(Screen.NewOrder[i]).DrawablePolygon.drawPolygon(g);
-                });
+        IntStream.range(0, Screen.NewOrder.length).forEach(i -> Screen.DPolygons.get(Screen.NewOrder[i]).DrawablePolygon.drawPolygon(g));
 
         g.setColor(Color.WHITE);
         g.dispose();
@@ -60,9 +57,8 @@ public final class Picture {
             ImageIO.write(img, fileType, new File(dirPath + fileName));
             System.out.println("done");
             Screen.condition = "take picture";
-        }catch (Exception e) {
-            e.printStackTrace();
-            Error.write(e);
+        }catch (Exception ignored) {
+
         }
         System.gc();
     }

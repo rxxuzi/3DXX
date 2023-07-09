@@ -305,6 +305,8 @@ public class Cube {
 			z -= ddz;
 		}
 	}
+
+	@SuppressWarnings("unused")
 	public void reflection2D(double ddx , double ddy){
 		if(x+dx > maxX){
             moveX = false;
@@ -335,12 +337,10 @@ public class Cube {
 
 
 	void removeCube(){
-		if (this.canDelete){
-			for(int i = 0; i < 6; i ++) {
-				Screen.DPolygons.remove(Polys[i]);
-			}
-			Screen.Cubes.remove(this);
+		for(int i = 0; i < 6; i ++) {
+			Screen.DPolygons.remove(Polys[i]);
 		}
+		Screen.Cubes.remove(this);
 	}
 
 
@@ -355,7 +355,7 @@ public class Cube {
         return data;
 	}
 	
-	public void setCanDelete(boolean canDelete) {
-		this.canDelete = canDelete;
+	public boolean getdelete() {
+		return canDelete;
 	}
 }

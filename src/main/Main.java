@@ -22,11 +22,14 @@ public class Main {
     protected static final long StartUpTime = System.currentTimeMillis();
     private static final AtomicBoolean Debug = new AtomicBoolean(false);
 
-    public static final boolean MINIMUM_MODE = false;
+    public static final boolean MINIMUM_MODE = true;
 
     public static void main(String[] args) {
+
         JFrame jf = new JFrame();
         Screen Core = new Screen();
+
+
         if (Debug.get()) {
             jf.setSize(1000, 1000);
             jf.add(new Menu());
