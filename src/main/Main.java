@@ -22,7 +22,7 @@ public class Main {
     protected static final long StartUpTime = System.currentTimeMillis();
     private static final AtomicBoolean Debug = new AtomicBoolean(false);
 
-    public static final boolean MINIMUM_MODE = true;
+    public static final boolean MINIMUM_MODE = false;
 
     public static void main(String[] args) {
 

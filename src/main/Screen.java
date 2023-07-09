@@ -163,9 +163,6 @@ public final class Screen extends JPanel {
 
 	public void paintComponent(Graphics g){
 
-		if(Main.MINIMUM_MODE){
-			g.setColor(Color.BLACK);
-		}
 		//•`‰æƒŠƒZƒbƒg
 		g.clearRect(0, 0, (int)Main.screenSize.getWidth(), (int)Main.screenSize.getHeight());
 
