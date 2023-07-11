@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 /**
  * Jsonファイルにキューブの情報を保存
- * @since 4.3
+ * @since 4.3d
  */
 public class Json {
     private static final String dirPath = "./screenshots/json/";
@@ -122,9 +122,7 @@ public class Json {
 
     private String indentString(int j) {
         StringBuilder tab = new StringBuilder();
-        for (int i = 0; i < j; i++) {
-            tab.append("    ");
-        }
+        tab.append("    ".repeat(Math.max(0, j)));
         return tab.toString();
     }
 }

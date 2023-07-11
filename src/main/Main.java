@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Main class of the program.
  *
  * @author Rxxuzi
- * @version 4.3.4
+ * @version 4.5
  * @implSpec This class is used to initialize the program.
  * @since 1.0
  */
@@ -19,10 +19,12 @@ public class Main {
      * 使用しているスクリーンのサイズを測定
      */
     public static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    
     protected static final long StartUpTime = System.currentTimeMillis();
+
     private static final AtomicBoolean Debug = new AtomicBoolean(false);
 
-    public static final boolean MINIMUM_MODE = false;
+    public static final boolean MINIMUM_MODE = true;
 
     public static void main(String[] args) {
 

@@ -5,7 +5,6 @@ import shot.Json;
 import shot.Picture;
 import vector.Calculator;
 import vector.Vector;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -332,7 +331,6 @@ public final class Screen extends JPanel {
 							if(Cubes.get(i).getdelete()){
 								//íœ‚³‚ê‚½ƒLƒ…[ƒu‚Ìî•ñ
 								String dCube = Cubes.get(i).toString();
-
 								Cubes.get(i).removeCube();
 								LastCubeDeleteTime = System.currentTimeMillis();
 								condition = "CUBE DELETED : " + dCube;
