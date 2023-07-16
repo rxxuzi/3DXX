@@ -86,7 +86,7 @@ public class Cube {
 	}
 
 	//座標と色情報からポリゴンを生成 + 固定するかどうか
-	public Cube(double x, double y, double z, double dx, double dy, double dz, Color color, boolean fixation){
+	public Cube(double x, double y, double z, double dx, double dy, double dz, Color color, boolean move){
 
 		Polys[0] = new DPolygon(new double[]{x, a, a, x}, new double[]{y, y, b, b},  new double[]{z, z, z, z}, color, false);
 		Polys[1] = new DPolygon(new double[]{x, a, a, x}, new double[]{y, y, b, b},  new double[]{c, c, c, c}, color, false);
@@ -121,11 +121,11 @@ public class Cube {
 			updatePoly();
 		}
 
-		this.move = !fixation;
+		this.move = move;
 	}
 
 	//座標と色情報からポリゴンを生成 + 固定するかどうか
-	public Cube(double x, double y, double z, double dx, double dy, double dz, Color color, boolean fixation ,boolean delete){
+	public Cube(double x, double y, double z, double dx, double dy, double dz, Color color, boolean move ,boolean delete){
 
 		Polys[0] = new DPolygon(new double[]{x, a, a, x}, new double[]{y, y, b, b},  new double[]{z, z, z, z}, color, false);
 		Polys[1] = new DPolygon(new double[]{x, a, a, x}, new double[]{y, y, b, b},  new double[]{c, c, c, c}, color, false);
@@ -160,7 +160,7 @@ public class Cube {
 			updatePoly();
 		}
 
-		this.move = !fixation;
+		this.move = move;
 		this.canDelete = delete;
 	}
 
@@ -355,6 +355,21 @@ public class Cube {
 		data[4] = "\"move  \" : " + "\"" + move + "\""+",\n";
 		data[5] = "\"Color \" : [" + this.color.getRed() + ", " + this.color.getGreen() + ", " + this.color.getBlue() + "]";
         return data;
+	}
+
+	/**
+	 * @since {@index }
+	 * @return x,y,z,dx,dy,dz,rotation,isDisplay,move,canDelete,color
+	 */
+	@Override
+    public String toString() {
+		String s;
+		s = x + "," + y + "," + z + "," + dx + "," + dy + "," + dz + ","   + color.getRed() + "," + color.getGreen() + "," + color.getBlue() + "," + move + ","  + canDelete + "," ;
+		return s;
+	}
+
+	public boolean overlap(double x, double y , double z , double dx, double dy, double dz) {
+		return x + dx == this.x && x == this.x + dx && y + dy == this.y && y == this.y + dy && z + dz == this.z && z == this.z + dz;
 	}
 	
 	public boolean getdelete() {

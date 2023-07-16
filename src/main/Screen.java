@@ -1,7 +1,9 @@
 package main;
 
 import jdk.jfr.BooleanFlag;
+import jet.Reader3dx;
 import shot.Json;
+import shot.Objct3DX;
 import shot.Picture;
 import vector.Calculator;
 import vector.Vector;
@@ -44,7 +46,7 @@ public final class Screen extends JPanel {
 	 * true : 右クリックするとブロックを生成する
 	 * false: ポリゴンを表示/非表示にする
 	 */
-	private static final AtomicBoolean SWITCH_CUBE_OPERATION = new AtomicBoolean(false);
+	private static final AtomicBoolean SWITCH_CUBE_OPERATION = new AtomicBoolean(true);
 	/**
 	 * スクリーンショット用フラグ
 	 */
@@ -53,6 +55,10 @@ public final class Screen extends JPanel {
 	 * キューブを作成するかのフラグ
 	 */
 	private final AtomicBoolean GENERATE = new AtomicBoolean(false);
+	/**
+	 * キューブをリロードする
+	 */
+	private final AtomicBoolean LOAD = new AtomicBoolean(false);
 	private final AtomicBoolean DELETE = new AtomicBoolean(false);
 	private static final boolean DEBUG_MODE = false;
 	private static final double height = 4.0;
@@ -109,7 +115,7 @@ public final class Screen extends JPanel {
 
 		invisibleMouse();
 
-		Cubes.add(new Cube(5,-6,6,2,2,2,new Color(200,200,200),true , false));
+		Cubes.add(new Cube(5,-6,6,2,2,2,new Color(200,200,200),false , false));
 
 		if (Main.MINIMUM_MODE) {
 			this.setBackground(Color.BLACK);
@@ -139,8 +145,8 @@ public final class Screen extends JPanel {
 
 		invisibleMouse();
 
-		Cubes.add(new Cube(5,-6,6,2,2,2,new Color(200,200,200),true , false));
-		Cubes.add(new Cube(5,6,2,2,2,2,new Color(200,200,200),true , false));
+		Cubes.add(new Cube(5,-6,6,2,2,2,new Color(200,200,200),false, false));
+		Cubes.add(new Cube(5,6,2,2,2,2,new Color(200,200,200),false , false));
 
 		if (Main.MINIMUM_MODE) {
 			this.setBackground(Color.BLACK);
@@ -345,12 +351,16 @@ public final class Screen extends JPanel {
 
 		//全削除
 		if(Control[9]) {
-			for(int i = 0; i < Cubes.size() ; i ++ ) {
-				Cubes.get(i).removeCube();
-				condition = "ALL DELETE";
-			}
-			System.gc();
+			allDelete();
 		}
+	}
+
+	public void allDelete(){
+		for(int i = 0; i < Cubes.size() ; i ++ ) {
+			Cubes.get(i).removeCube();
+			condition = "ALL DELETE";
+		}
+		System.gc();
 	}
 
 	//距離情報をソート
@@ -523,6 +533,9 @@ public final class Screen extends JPanel {
 			p.take();
 			Json json = new Json(name);
 			json.write("{");
+
+			Objct3DX objct3DX = new Objct3DX();
+
 			for (int i = 0; i < Cubes.size(); i++) {
 				if(i != 0) {
 					json.write(",");
@@ -532,6 +545,7 @@ public final class Screen extends JPanel {
 				if (i == Cubes.size() - 1) {
 					json.write("\n");
 				}
+				objct3DX.write(Cubes.get(i).toString());
 			}
 			json.write("}\n");
 
@@ -570,37 +584,37 @@ public final class Screen extends JPanel {
 				case 0 -> {
 					sss = "0 : Bottom"; //-z
 					if(generateCube(x,y,z-d)) {
-						Cubes.add(new Cube(x,y,z-d,d,d,d, new Color(255,75,75) , true));
+						Cubes.add(new Cube(x,y,z-d,d,d,d, new Color(255,75,75) , false));
 					}
 				}
 				case 1 -> {
 					sss = "1 : Top"; // +z
 					if(generateCube(x,y,z+d)) {
-						Cubes.add(new Cube(x,y,z+d,d,d,d, new Color(75,255,255) , true));
+						Cubes.add(new Cube(x,y,z+d,d,d,d, new Color(75,255,255) , false));
 					}
 				}
 				case 2 -> {
 					sss = "2 : Right"; // +y
 					if(generateCube(x,y+d,z)){
-						Cubes.add(new Cube(x,y+d,z,d,d,d, new Color(75,75,255) , true));
+						Cubes.add(new Cube(x,y+d,z,d,d,d, new Color(75,75,255) , false));
 					}
 				}
 				case 3 -> {
 					sss = "3 : Front"; //-x
 					if(generateCube(x-d,y,z)) {
-						Cubes.add(new Cube(x-d,y,z,d,d,d, new Color(255,255,75) , true));
+						Cubes.add(new Cube(x-d,y,z,d,d,d, new Color(255,255,75) , false));
 					}
 				}
 				case 4 -> {
 					sss = "4 : Left"; // -y
 					if(generateCube(x,y-d,z)) {
-						Cubes.add(new Cube(x,y-d,z,d,d,d, new Color(75,255,75) , true));
+						Cubes.add(new Cube(x,y-d,z,d,d,d, new Color(75,255,75) , false));
 					}
 				}
 				case 5 -> {
 					sss = "5 : Back "; // +x
 					if(generateCube(x+d,y,z)) {
-						Cubes.add(new Cube(x+d,y,z,d,d,d, new Color(255,75,255) , true));
+						Cubes.add(new Cube(x+d,y,z,d,d,d, new Color(255,75,255) , false));
 					}
 				}
 				default -> sss = "-1 : Nothing";
@@ -748,6 +762,14 @@ public final class Screen extends JPanel {
 				}
 
 				case KeyEvent.VK_COMMA -> Control[10] = true;
+				case KeyEvent.VK_PERIOD -> Control[11] = true;
+
+                case KeyEvent.VK_L -> {
+					allDelete();
+					Reader3dx.run();
+					condition  = "Reader3dx : Run , overlap : " + Reader3dx.overlapCnt;
+				}
+
 
 			}
 
