@@ -55,10 +55,6 @@ public final class Screen extends JPanel {
 	 * キューブを作成するかのフラグ
 	 */
 	private final AtomicBoolean GENERATE = new AtomicBoolean(false);
-	/**
-	 * キューブをリロードする
-	 */
-	private final AtomicBoolean LOAD = new AtomicBoolean(false);
 	private final AtomicBoolean DELETE = new AtomicBoolean(false);
 	private static final boolean DEBUG_MODE = false;
 	private static final double height = 4.0;
@@ -104,7 +100,7 @@ public final class Screen extends JPanel {
 	private String sss = "";
 	private static int PressPP = 0; // < キーの入力回数
 	private long LastPressComma = 0; // < キャッシュ
-	private long LastPressPeriod = 0; // < キャッシュ
+	// < キャッシュ
 	private boolean displayCubeMenu = false;
 
 	private final static Color[] COLOR = {
@@ -930,4 +926,5 @@ public final class Screen extends JPanel {
 				+ "\n DEBUG MODE : " + DEBUG_MODE
 				+ "\n GRAVITY	 : " + gravity;
 	}
+
 }
