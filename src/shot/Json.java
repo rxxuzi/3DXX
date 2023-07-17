@@ -18,40 +18,10 @@ public class Json {
     FileWriter fw = null;
     File file;
 
-    public Json() {
-        file = new File(filepath);
-        if (file.exists()) {
-            if(file.delete()){
-                System.out.println("file deleted");
-            }
-        }
-        //make directory
-        File dir = new File(dirPath);
-        if (!dir.exists()) {
-            if(dir.mkdirs()){
-                Saves.write("made directory : " + dirPath);
-            }
-        }
-    }
-
     public Json(String filename){
         this.filename = filename;
         this.filepath = dirPath + filename + ".json";
-
         file = new File(filepath);
-        if (file.exists()) {
-            if(file.delete()){
-                System.out.println("file deleted : " + filepath);
-            }
-        }
-        //make directory
-        File dir = new File(dirPath);
-        if (!dir.exists()) {
-            if(dir.mkdirs()){
-                Saves.write("made directory " , dirPath);
-            }
-        }
-
     }
 
     public void write(String[] data , int indent) {

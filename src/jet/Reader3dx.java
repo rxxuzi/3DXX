@@ -23,6 +23,9 @@ public class Reader3dx {
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             String line;
             while ((line = br.readLine()) != null) {
+                if(line.startsWith("#")){
+                    continue;
+                }
                 String[] tokens = line.split(",");
                 if (tokens.length == 11) {
                     double x = Double.parseDouble(tokens[0]);

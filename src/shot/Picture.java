@@ -25,17 +25,6 @@ public final class Picture {
     String fileName = "test";
     String fileType = "png";
 
-    public Picture() {
-        //make directory
-        File dir = new File(dirPath);
-        if (!dir.exists()) {
-
-            if(dir.mkdirs()){
-                Saves.write("make directory");
-            }
-        }
-    }
-
     public void setFileName(String fileName) {
         this.fileName = fileName  + "." + fileType;
     }

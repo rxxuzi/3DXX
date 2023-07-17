@@ -10,19 +10,14 @@ public class Objct3DX {
     String filepath = dirPath + filename + fileType;
     FileWriter fw = null;
     File file;
-    public Objct3DX() {
+    public Objct3DX(){
         file = new File(filepath);
-        if (file.exists()) {
-            if(file.delete()){
-                System.out.println("file deleted");
-            }
-        }
-        //make directory
-        File dir = new File(dirPath);
-        if (!dir.exists()) {
-            if(dir.mkdirs()){
-                System.out.println("make directory");
-            }
+        try {
+            fw = new FileWriter(file, true);
+            fw.write("# This is Object storage file. \n");
+            fw.close();
+        }catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

@@ -95,7 +95,6 @@ public final class Screen extends JPanel {
 	static boolean OutLines = true; // ポリゴンのアウトラインの描画を決めるフラグ
 	boolean[] Control = new boolean[15];//キー入力の情報を格納する配列
 	public static String condition = "NONE"; //状態を示す文字列
-	int Press = 10;
 	public static long t ; //時間
 	Robot r ;
 	Random random = new Random();
@@ -103,6 +102,15 @@ public final class Screen extends JPanel {
 	@BooleanFlag
 	public boolean Details = true;
 	private String sss = "";
+	private static int PressPP = 0; // < キーの入力回数
+	private long LastPressComma = 0; // < キャッシュ
+	private long LastPressPeriod = 0; // < キャッシュ
+	private boolean displayCubeMenu = false;
+
+	private final static Color[] COLOR = {
+			new Color(255,75,75)  ,new Color(75,255,255) , new Color(75,75,255) ,
+			new Color(255,255,75) ,new Color(75,255,75)  , new Color(255,75,255)
+	} ;
 
 	public Screen(){
 		//Key and Mouse Listener
@@ -115,7 +123,7 @@ public final class Screen extends JPanel {
 
 		invisibleMouse();
 
-		Cubes.add(new Cube(5,-6,6,2,2,2,new Color(200,200,200),false , false));
+		Cubes.add(new Cube(0,0,6,2,2,2,new Color(200,200,200),false , false));
 
 		if (Main.MINIMUM_MODE) {
 			this.setBackground(Color.BLACK);
@@ -239,8 +247,10 @@ public final class Screen extends JPanel {
 			g.drawString(sss , 10 , 260);
 		}
 
-		if(Control[10]){
-			Press++;
+		if(displayCubeMenu){
+			if( System.currentTimeMillis()  - LastPressComma< 1000){
+				cubeMenu(g,PressPP%COLOR.length);
+			}
 		}
 
 		//描画更新のインターバル
@@ -253,6 +263,31 @@ public final class Screen extends JPanel {
 		for(Cube c : Cubes){
 			c.setDisplayCube();
 		}
+
+	}
+
+	//キューブの詳細を表示する
+	private void cubeMenu(Graphics g, int colorp) {
+		int centerX = (int)Main.screenSize.getWidth()/2, centerY = (int)Main.screenSize.getHeight()/2;
+		g.setColor(Color.GREEN);
+		final int shape = 6;
+		int l = 50;
+		int[] x = new int[shape];
+		int[] y = new int[shape];
+		double d = Math.PI / 6;
+		double h = Math.PI / 3;
+		for(int t = 0 ; t < shape ; t ++){
+			x[t] = (int) (Math.cos(t * h + d) * 2 * l) + centerX ;
+			y[t] = (int) (Math.sin(t * h + d) * 2 * l) + centerY ;
+		}
+		g.setColor(COLOR[colorp]);
+		g.fillPolygon(x,y,shape);
+		g.drawString(COLOR[colorp].toString() , centerX - 50, centerY-l*4);
+		g.setColor(Color.BLACK);
+		g.drawPolygon(x,y,shape);
+		g.drawLine(x[1],y[1],centerX,centerY);
+		g.drawLine(x[3],y[3],centerX,centerY);
+		g.drawLine(x[5],y[5],centerX,centerY);
 
 	}
 
@@ -524,6 +559,11 @@ public final class Screen extends JPanel {
 			}
 		}
 
+		if (Control[10]){
+			PressPP ++ ;
+			Control[10] = false;
+		}
+
 		//スクリーンショットと立方体の情報を記録する
 		if(SCREEN_SHOT.get()){
 			String date =  new SimpleDateFormat("yyyy-MM-dd").format(new Date());
@@ -580,41 +620,48 @@ public final class Screen extends JPanel {
             }
 		}
 		if(cube != -1) {
+			Color c = COLOR[PressPP%COLOR.length];
 			switch (side) {
 				case 0 -> {
 					sss = "0 : Bottom"; //-z
 					if(generateCube(x,y,z-d)) {
-						Cubes.add(new Cube(x,y,z-d,d,d,d, new Color(255,75,75) , false));
+//						Cubes.add(new Cube(x,y,z-d,d,d,d, COLOR[0] , false));
+						Cubes.add(new Cube(x,y,z-d,d,d,d, c , false));
 					}
 				}
 				case 1 -> {
 					sss = "1 : Top"; // +z
 					if(generateCube(x,y,z+d)) {
-						Cubes.add(new Cube(x,y,z+d,d,d,d, new Color(75,255,255) , false));
+//						Cubes.add(new Cube(x,y,z+d,d,d,d, COLOR[1] , false));
+						Cubes.add(new Cube(x,y,z+d,d,d,d,  c , false));
 					}
 				}
 				case 2 -> {
 					sss = "2 : Right"; // +y
 					if(generateCube(x,y+d,z)){
-						Cubes.add(new Cube(x,y+d,z,d,d,d, new Color(75,75,255) , false));
+//						Cubes.add(new Cube(x,y+d,z,d,d,d, COLOR[2] , false));
+						Cubes.add(new Cube(x,y+d,z,d,d,d, c , false));
 					}
 				}
 				case 3 -> {
 					sss = "3 : Front"; //-x
 					if(generateCube(x-d,y,z)) {
-						Cubes.add(new Cube(x-d,y,z,d,d,d, new Color(255,255,75) , false));
+//						Cubes.add(new Cube(x-d,y,z,d,d,d, COLOR[3] , false));
+						Cubes.add(new Cube(x-d,y,z,d,d,d,  c , false));
 					}
 				}
 				case 4 -> {
 					sss = "4 : Left"; // -y
 					if(generateCube(x,y-d,z)) {
-						Cubes.add(new Cube(x,y-d,z,d,d,d, new Color(75,255,75) , false));
+//						Cubes.add(new Cube(x,y-d,z,d,d,d, COLOR[4] , false));
+						Cubes.add(new Cube(x,y-d,z,d,d,d, c , false));
 					}
 				}
 				case 5 -> {
 					sss = "5 : Back "; // +x
 					if(generateCube(x+d,y,z)) {
-						Cubes.add(new Cube(x+d,y,z,d,d,d, new Color(255,75,255) , false));
+//						Cubes.add(new Cube(x+d,y,z,d,d,d, COLOR[5], false));
+						Cubes.add(new Cube(x+d,y,z,d,d,d,  c, false));
 					}
 				}
 				default -> sss = "-1 : Nothing";
@@ -761,7 +808,11 @@ public final class Screen extends JPanel {
 
 				}
 
-				case KeyEvent.VK_COMMA -> Control[10] = true;
+				case KeyEvent.VK_COMMA -> {
+					Control[10] = true;
+					LastPressComma = System.currentTimeMillis();
+					displayCubeMenu = true;
+				}
 				case KeyEvent.VK_PERIOD -> Control[11] = true;
 
                 case KeyEvent.VK_L -> {
@@ -769,10 +820,7 @@ public final class Screen extends JPanel {
 					Reader3dx.run();
 					condition  = "Reader3dx : Run , overlap : " + Reader3dx.overlapCnt;
 				}
-
-
 			}
-
 		}
 		
 		//キーを離した時にfalse

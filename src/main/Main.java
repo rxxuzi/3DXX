@@ -1,6 +1,8 @@
 package main;
 
 import shot.CleanUp;
+import shot.DirectoryCheck;
+import write.Saves;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,6 +32,9 @@ public class Main {
 
         JFrame jf = new JFrame();
         Screen Core = new Screen();
+        new Saves();
+        DirectoryCheck directoryCheck = new DirectoryCheck();
+        directoryCheck.run();
 
 
         if (Debug.get()) {
