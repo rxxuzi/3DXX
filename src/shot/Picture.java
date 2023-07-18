@@ -21,6 +21,7 @@ import java.util.stream.IntStream;
 public final class Picture {
     private static final int WIDTH = Main.screenSize.width;
     private static final int HEIGHT = Main.screenSize.height;
+    //  private static final String dirPath = "./screenshots/";
     private static final String dirPath = "./screenshots/pic/";
     String fileName = "test";
     String fileType = "png";
@@ -29,13 +30,11 @@ public final class Picture {
         this.fileName = fileName  + "." + fileType;
     }
 
-    /**
-     * スクリーンショットを撮る
-     */
+
+    // Taken a screenshot and save it to the specified directory.
     public void take() {
         BufferedImage img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
         Graphics g = img.getGraphics();
-
 
         //Stream APIを使用したfor文の並列処理
         IntStream.range(0, Screen.NewOrder.length).forEach(i -> Screen.DPolygons.get(Screen.NewOrder[i]).DrawablePolygon.drawPolygon(g));

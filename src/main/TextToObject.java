@@ -5,11 +5,10 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.ArrayList;
 
-/*
-* rscフォルダ内のテキストを二次元配列に変換し、
-* オブジェクトとしてScreen.javaにあるList "Cube"にaddするclass
-* @since 2.1
-* */
+/**
+ * This class is used to convert the text file in the rsc folder to a 2D array and add the cubes to the Screen.java class.
+ * @since 2.1
+ */
 class TextToObject {
 	//文字列を格納するList
 	ArrayList<String> line = new ArrayList<>();
@@ -55,15 +54,9 @@ class TextToObject {
 			for (int j = 0; j < col; j++) {
 				//それぞれに対応した色にしてCubeを作成
 				switch (x[i][j]) {
-				case 1:
-					Screen.Cubes.add(new Cube(j, -10, row - i, 1, 1, 1, new Color(255, 0, 0), true));
-					break;
-				case 2:
-					Screen.Cubes.add(new Cube(j, -10, row - i, 1, 1, 1, new Color(98, 86, 26), true));
-					break;
-				case 3:
-					Screen.Cubes.add(new Cube(j, -10, row - i, 1, 1, 1, new Color(237, 148, 102), true));
-					break;
+					case 1 -> Screen.Cubes.add(new Cube(j, -10, row - i, 1, 1, 1, new Color(255, 0, 0), true));
+					case 2 -> Screen.Cubes.add(new Cube(j, -10, row - i, 1, 1, 1, new Color(98, 86, 26), true));
+					case 3 -> Screen.Cubes.add(new Cube(j, -10, row - i, 1, 1, 1, new Color(237, 148, 102), true));
 				}
 			}
 		}

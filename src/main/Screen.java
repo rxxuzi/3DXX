@@ -73,8 +73,8 @@ public final class Screen extends JPanel {
 	private long LastMoveTime = 0;
 	private long LastCubeDeleteTime = 0;
 	private long LastCubeGenerateTime = 0 ;
-	static final double[] FViewFrom = { -2 , -2 , 10 };
-	static final double[] FViewTo = {  -2 , 0 ,  5 };
+	static final double[] FViewFrom = { -2 , -2 , 10 }; //初期カメラ位置
+	static final double[] FViewTo = {  -2 , 0 ,  5 };	//初期オブジェクト座標
 	public static double[] ViewFrom = FViewFrom.clone(); //カメラの座標
 	public static double[] ViewTo   = FViewTo.clone();	  //オブジェクトの座標
 	public static double zoom = 1000;
@@ -89,23 +89,26 @@ public final class Screen extends JPanel {
 	double HorizontalRotationSpeed = 500; //水平回転の速さ
 	public static int[] NewOrder; //配列DPolygonの描画する順番を保持する配列
 	static boolean OutLines = true; // ポリゴンのアウトラインの描画を決めるフラグ
-	boolean[] Control = new boolean[15];//キー入力の情報を格納する配列
+	private final boolean[] Control = new boolean[15];//キー入力の情報を格納する配列
 	public static String condition = "NONE"; //状態を示す文字列
 	public static long t ; //時間
-	Robot r ;
-	Random random = new Random();
+	private final Random random = new Random();
 	private final Picture p = new Picture();
 	@BooleanFlag
 	public boolean Details = true;
 	private String sss = "";
 	private static int PressPP = 0; // < キーの入力回数
 	private long LastPressComma = 0; // < キャッシュ
-	// < キャッシュ
+
 	private boolean displayCubeMenu = false;
 
 	private final static Color[] COLOR = {
-			new Color(255,75,75)  ,new Color(75,255,255) , new Color(75,75,255) ,
-			new Color(255,255,75) ,new Color(75,255,75)  , new Color(255,75,255)
+			new Color(255,75,75)  ,
+			new Color(75,255,255) ,
+			new Color(75,75,255) ,
+			new Color(255,255,75) ,
+			new Color(75,255,75)  ,
+			new Color(255,75,255)
 	} ;
 
 	public Screen(){
@@ -161,8 +164,11 @@ public final class Screen extends JPanel {
 			Pyramids.add(new Pyramid(10,-5,2, 2,2,2,Color.MAGENTA));
 
 			new Ball(3,3,3,4,4,4,Color.MAGENTA);
+
 			new TextToObject("./rsc/object/mario.txt");
+
 			new Ground();
+
 			new Floor(-20,-10,30,30);
 		}
 
@@ -466,30 +472,37 @@ public final class Screen extends JPanel {
 			if(Control[0]){
 				xMove += ViewVector.x * cameraSpeed;
 				yMove += ViewVector.y * cameraSpeed;
-				zMove += ViewVector.z * cameraSpeed;
+				if(Main.MOVE2D){
+					zMove += ViewVector.z * cameraSpeed;
+				}
 			}
 
 			//後ろに移動
 			if(Control[2]){
 				xMove -= ViewVector.x * cameraSpeed;
 				yMove -= ViewVector.y * cameraSpeed;
-				zMove -= ViewVector.z * cameraSpeed;
+				if(Main.MOVE2D){
+					zMove -= ViewVector.z * cameraSpeed;
+				}
 			}
 
 			//左に移動
 			if(Control[1]){
 				xMove += SideViewVector.x * cameraSpeed;
 				yMove += SideViewVector.y * cameraSpeed;
-				zMove += SideViewVector.z * cameraSpeed;
+				if(Main.MOVE2D){
+					zMove += SideViewVector.z * cameraSpeed;
+				}
 			}
 
 			//右に移動
 			if(Control[3]){
 				xMove -= SideViewVector.x * cameraSpeed;
 				yMove -= SideViewVector.y * cameraSpeed;
-				zMove -= SideViewVector.z * cameraSpeed;
+				if(Main.MOVE2D){
+					zMove -= SideViewVector.z * cameraSpeed;
+				}
 			}
-
             LastMoveTime = System.currentTimeMillis();
         }
 
@@ -783,6 +796,7 @@ public final class Screen extends JPanel {
 				case KeyEvent.VK_DELETE -> Control[9] = true;
 				//詳細情報の表示/非表示
 				case KeyEvent.VK_ENTER -> Details = !Details;
+				//アウトラインの表示/非表示
 				case KeyEvent.VK_O -> {
 					OutLines = !OutLines; //ライン削除
 					if (OutLines) {
@@ -793,6 +807,7 @@ public final class Screen extends JPanel {
 				}
 				//Escapeキーを押すと終了
 				case KeyEvent.VK_ESCAPE -> System.exit(0);
+				//スクリーンショット撮影
 				case KeyEvent.VK_P -> SCREEN_SHOT.set(true);
 				case KeyEvent.VK_K -> GENERATE.set(true);
 
@@ -845,12 +860,14 @@ public final class Screen extends JPanel {
 	 * マウスの情報を扱うクラス
 	 * マウスの座標、マウスクリック情報、マウスホイールの情報を扱う
 	 */
+
+	// This class is for mouse movement and mouse click
 	class AboutMouse implements MouseListener , MouseMotionListener, MouseWheelListener{
 		
 		//マウスを中央に移動させるメソッド
 		void CenterMouse(){
 			try {
-				r = new Robot();
+				Robot r = new Robot();
 				r.mouseMove((int)Main.screenSize.getWidth()/2, (int)Main.screenSize.getHeight()/2);
 			} catch (AWTException ignored) {
 

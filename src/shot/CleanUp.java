@@ -1,11 +1,13 @@
 package shot;
 
+import write.Saves;
+
 import java.io.File;
 import java.util.Objects;
 
-public class CleanUp {
-    private static String  json_dirPath = "./screenshots/json";
-    private static String  picture_dirPath = "./screenshots/pic/";
+public final class  CleanUp {
+    private static final String  json_dirPath = "./screenshots/json";
+    private static final String  picture_dirPath = "./screenshots/pic/";
 
     public static void main(String[] args) {
         File json_dir = new File(json_dirPath);
@@ -15,7 +17,9 @@ public class CleanUp {
         try{
             for (File json_file : Objects.requireNonNull(json_files)) {
                 if (json_file.isFile()) {
-                    json_file.delete();
+                    if(json_file.delete()){
+                        Saves.write("Delete Json File");
+                    }
                 }
             }
         }catch (NullPointerException e){

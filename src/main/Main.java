@@ -16,17 +16,20 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @implSpec This class is used to initialize the program.
  * @since 1.0
  */
-public class Main {
+public final class Main {
+
     /**
      * 使用しているスクリーンのサイズを測定
      */
     public static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     
-    protected static final long StartUpTime = System.currentTimeMillis();
+    public static final long StartUpTime = System.currentTimeMillis();
 
     private static final AtomicBoolean Debug = new AtomicBoolean(false);
 
     public static final boolean MINIMUM_MODE = true;
+
+    public static final boolean MOVE2D = false;
 
     public static void main(String[] args) {
 
@@ -35,8 +38,7 @@ public class Main {
         new Saves();
         DirectoryCheck directoryCheck = new DirectoryCheck();
         directoryCheck.run();
-
-
+        Saves.write("StartUpTime : " + StartUpTime , true);
         if (Debug.get()) {
             jf.setSize(1000, 1000);
             jf.add(new Menu());
@@ -48,6 +50,7 @@ public class Main {
             jf.add(Core);
             CleanUp.main(args);
         }
+
         jf.setVisible(true);
         System.out.println("It is working properly.");
         System.out.println("property  : \n" + Core);

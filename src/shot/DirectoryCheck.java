@@ -3,7 +3,7 @@ package shot;
 import write.Saves;
 
 import java.io.File;
-
+// This class is used to check if the directory exists.
 public class DirectoryCheck {
     int cnt = 4;
     private final String[] dirPath = {

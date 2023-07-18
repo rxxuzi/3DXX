@@ -2,13 +2,11 @@ package main;
 
 import java.awt.*;
 
-abstract public class Polyhedron {
+abstract public class Polyhedron  {
 	//À•W
 	double x, y, z, dx, dy, dz;
 	double rotation = Math.PI*0.75;
 	double[] RotAdd = new double[4];
-	//Fî•ñ
-	Color color;
 	//‰ñ“]Œã‚ÌÀ•W
 	double x1, x2, x3, x4, y1, y2, y3, y4;
 	DPolygon[] Polys = new DPolygon[6];
@@ -55,11 +53,7 @@ abstract public class Polyhedron {
 		double lengthY = Math.abs(Screen.ViewFrom[1] - y);
 		double lengthZ = Math.abs(Screen.ViewFrom[2] - z);
 
-		if( (lengthX + lengthY + lengthZ)/3 < maxDis){
-			this.isDisplay = true;
-		}else {
-			this.isDisplay = false;
-		}
+		this.isDisplay = (lengthX + lengthY + lengthZ) / 3 < maxDis;
 	}
 	
 	@SuppressWarnings("unused")

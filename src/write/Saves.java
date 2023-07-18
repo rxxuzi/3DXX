@@ -33,6 +33,48 @@ public final class Saves {
         }
     }
 
+    public static void write(String str , boolean n){
+        //method name
+        String className ;
+        String methodName ;
+        //line number
+        int lineNumber ;
+        //file name
+        String fileName;
+        //date
+        String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        //time
+        String time = new SimpleDateFormat("HH:mm:ss").format(new Date());
+        //stack trace
+        String stackTrace ;
+
+
+
+        StackTraceElement[] ste = new Throwable().getStackTrace();
+        for (StackTraceElement stackTraceElement : ste) {
+            className  = stackTraceElement.getClassName();
+            methodName = stackTraceElement.getMethodName();
+            lineNumber = stackTraceElement.getLineNumber();
+            fileName = stackTraceElement.getFileName();
+            stackTrace = stackTraceElement.toString();
+
+            Saves.write("Date: " + date + " Time: " + time);
+            Saves.write("Class: " + className);
+            Saves.write("Method: " + methodName);
+            Saves.write("File: " + fileName);
+            Saves.write("Line: " + lineNumber);
+            Saves.write("Stack Trace: " + stackTrace);
+        }
+
+        try {
+            fw = new FileWriter(file, true);
+            fw.write(str + ": " + n + "\n");
+            fw.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static void write(String str , String str2){
         try {
             fw = new FileWriter(file, true);

@@ -3,6 +3,7 @@ package main;
 import java.awt.Color;
 import java.util.Random;
 
+// This class is used to initialize the program.
 public class Cube {
 	//ç¿ïW
 	double x, y, z, dx, dy, dz;
