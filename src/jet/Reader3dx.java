@@ -8,20 +8,26 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+/**
+ <h1>Read the file and add the cube to the screen.</h1>
+ <h2>The file should be in the format: {@code  .3dx}</h2>
+ <p><strong>Parameters:</strong></p>
+ <ul>
+ <li><strong>x, y, z, dx, dy, dz:</strong> Coordinates of the center of the cube.</li>
+ <li><strong>r, g, b:</strong> RGB values of the cube.</li>
+ <li><strong>move:</strong> A boolean value indicating whether the cube should be moved or not.</li>
+ <li><strong>delete:</strong> A boolean value indicating whether the cube should be deleted or not.</li>
+ </ul>
+ @author rxxuzi
+ @since 4.0.2
+ */
 public class Reader3dx {
+
     public static int overlapCnt = 0;
     public static String path = "./data/test.3dx";
     public static void run(){
-        /*
-        Read the file and add the cube to the screen.
-        The file should be in the format: .3dx
-        x,y,z,dx,dy,dz,r,g,b,move,delete
-        where x,y,z,dx,dy,dz are the coordinates of the center of the cube,
-        r,g,b are the RGB values of the cube,
-        move is a boolean value that indicates whether the cube should be
-        moved or not, and delete is a boolean value that indicates whether
-        the cube should be deleted or not.
-         */
+
+
         if(path.endsWith(".3dx")){
             try (BufferedReader br = new BufferedReader(new FileReader(path))) {
                 String line;

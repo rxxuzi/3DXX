@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public final class Main {
 
-    /**
+    /*
      * 使用しているスクリーンのサイズを測定
      */
     public static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -35,10 +35,10 @@ public final class Main {
 
         JFrame jf = new JFrame();
         Screen Core = new Screen();
-        new Saves();
+//        new Saves();
+//        Saves.write("StartUpTime : " + StartUpTime , true);
         DirectoryCheck directoryCheck = new DirectoryCheck();
         directoryCheck.run();
-        Saves.write("StartUpTime : " + StartUpTime , true);
         if (Debug.get()) {
             jf.setSize(1000, 1000);
             jf.add(new Menu());

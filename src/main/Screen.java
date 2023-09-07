@@ -38,7 +38,7 @@ public final class Screen extends JPanel {
 	 * FIRST_PERSON_MODE :
 	 * true :
 	 * 1.重力の追加(浮遊できなくなる)
-	 * * 2.カメラの最低z座標が2となる
+	 * 2.カメラの最低z座標が2となる
 	 */
 	public static final AtomicBoolean FIRST_PERSON_MODE = new AtomicBoolean(false);
 	/**
@@ -597,8 +597,6 @@ public final class Screen extends JPanel {
 				objct3DX.write(Cubes.get(i).toString());
 			}
 			json.write("}\n");
-
-			System.gc();
 			SCREEN_SHOT.set(false);
 		}
 
