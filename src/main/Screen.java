@@ -27,8 +27,9 @@ import java.util.stream.IntStream;
  * @see javax.swing.JPanel
  * @see Main
  *
-*
-* */
+ *
+ **/
+
 public final class Screen extends JPanel {
 
 	@Serial
@@ -213,8 +214,6 @@ public final class Screen extends JPanel {
 		int FontSize = 15;
 
 		Font font = new Font(Font.DIALOG, Font.ITALIC,FontSize);
-		//角度の計算
-		double VAngle =  Math.toDegrees(Math.tan(VerticalLook));
 
 		g.setFont(font);
 
@@ -222,31 +221,7 @@ public final class Screen extends JPanel {
 		snakeMove();
 
 		if(Details){
-			g.drawString("FPS : " + (int)drawFPS , 10, 15);
-			g.drawString("ELAPSED TIME : " + (System.currentTimeMillis() - Main.StartUpTime ) + "ms" , 10 , 30);
-			g.drawString("OBJECT : " + Arrays.toString(ViewTo)   , 10 ,45);
-			g.drawString("CAMERA : " + Arrays.toString(ViewFrom) , 10 ,60);
-			g.drawString("ZOOM   : " + zoom , 10 , 75);
-			g.drawString("Vertical   Look : " + VerticalLook , 10 , 90);
-			g.drawString("Horizontal Look(rad) : " + HorizontalLook , 10 , 105);
-			g.drawString("Vertical angle   	 : " + (int)VAngle + "°" , 10 ,120);
-			g.drawString("Number Of Polygons : " + DPolygons.size() , 10 ,135);
-			g.drawString("Number Of Cubes    : " + Cubes.size() , 10 ,150);
-
-			try{
-				g.drawString("Focus Polys ID : " + FocusPolygon.toString() , 10 ,170);
-			}catch (NullPointerException e){
-				g.drawString("Focus Polys ID : " + "NULL" , 10 ,170);
-			}
-			g.setFont(new Font(Font.SANS_SERIF , Font.BOLD , 20));
-			g.drawString("CONDITION: " + condition , 10 ,190);
-			if(SWITCH_CUBE_OPERATION.get()){
-				g.drawString("GENERATE MODE" , 10 , 220);
-			}else{
-				g.drawString("DELETE MODE" , 10 ,220);
-			}
-			g.drawString(t +"s", 10,240);
-			g.drawString(sss , 10 , 260);
+			showDetail(g);
 		}
 
 		if(displayCubeMenu){
@@ -265,7 +240,37 @@ public final class Screen extends JPanel {
 		for(Cube c : Cubes){
 			c.setDisplayCube();
 		}
+	}
 
+	private void showDetail(Graphics g){
+
+		double VAngle =  Math.toDegrees(Math.tan(VerticalLook));
+
+		g.drawString("FPS : " + (int)drawFPS , 10, 15);
+		g.drawString("ELAPSED TIME : " + (System.currentTimeMillis() - Main.StartUpTime ) + "ms" , 10 , 30);
+		g.drawString("OBJECT : " + Arrays.toString(ViewTo)   , 10 ,45);
+		g.drawString("CAMERA : " + Arrays.toString(ViewFrom) , 10 ,60);
+		g.drawString("ZOOM   : " + zoom , 10 , 75);
+		g.drawString("Vertical   Look : " + VerticalLook , 10 , 90);
+		g.drawString("Horizontal Look(rad) : " + HorizontalLook , 10 , 105);
+		g.drawString("Vertical angle   	 : " + (int)VAngle + "°" , 10 ,120);
+		g.drawString("Number Of Polygons : " + DPolygons.size() , 10 ,135);
+		g.drawString("Number Of Cubes    : " + Cubes.size() , 10 ,150);
+
+		try{
+			g.drawString("Focus Polys ID : " + FocusPolygon.toString() , 10 ,170);
+		}catch (NullPointerException e){
+			g.drawString("Focus Polys ID : " + "NULL" , 10 ,170);
+		}
+		g.setFont(new Font(Font.SANS_SERIF , Font.BOLD , 20));
+		g.drawString("CONDITION: " + condition , 10 ,190);
+		if(SWITCH_CUBE_OPERATION.get()){
+			g.drawString("GENERATE MODE" , 10 , 220);
+		}else{
+			g.drawString("DELETE MODE" , 10 ,220);
+		}
+		g.drawString(t +"s", 10,240);
+		g.drawString(sss , 10 , 260);
 	}
 
 	//キューブの詳細を表示する
@@ -284,7 +289,15 @@ public final class Screen extends JPanel {
 		}
 		g.setColor(COLOR[colorp]);
 		g.fillPolygon(x,y,shape);
-		g.drawString(COLOR[colorp].toString() , centerX - 50, centerY-l*4);
+
+		String rgb;
+		int cr = COLOR[colorp].getRed();
+		int cg = COLOR[colorp].getGreen();
+		int cb = COLOR[colorp].getBlue();
+
+		rgb = "Cube: R : " + cr + " G : " + cg + " B : " + cb;
+
+		g.drawString(rgb , centerX - 50, centerY-l*4);
 		g.setColor(Color.BLACK);
 		g.drawPolygon(x,y,shape);
 		g.drawLine(x[1],y[1],centerX,centerY);
@@ -560,7 +573,6 @@ public final class Screen extends JPanel {
 				if(CoordinateCheck(xyz)) {
 					Cubes.add(new Cube(-rx/25d , ry/25d , rz/25d + 2, 1, 1, 1, new Color(rx , ry , rz) ));
 					condition = "CUBE GENERATED : (x,y,z) = " + rx /25 +"," + ry /25 + "," + rz /25;
-//					Saves.write(rx /25 +"," + ry /25 + "," + rz /25 , new Color(rx , ry , rz));
 				}
 				
 				counter1 ++ ;
